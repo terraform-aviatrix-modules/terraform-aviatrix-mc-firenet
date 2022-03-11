@@ -182,7 +182,7 @@ locals {
   }
 
   #Determine firewall username
-  username = coalesce(var.username, lookup(local.username_map, local.cloud, null))
+  username = var.username == null ? lookup(local.username_map, local.cloud, null) : var.username
   username_map = {
     azure = local.is_checkpoint ? "admin" : "fwadmin",
   }
