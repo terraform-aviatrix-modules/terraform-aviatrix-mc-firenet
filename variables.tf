@@ -1,29 +1,28 @@
 variable "transit_module" {
   description = "Refer to the mc-transit module that built the transit. This module plugs directly into it's output to build firenet on top of it."
 
-  # validation {
-  #   condition     = contains(["aws", "azure", "oci", "ali", "gcp"], lower(var.transit_module))
-  #   error_message = "Invalid cloud type. Choose AWS, Azure, GCP, ALI or OCI."
-  # }  
-
+  validation {
+    condition     = var.transit_module.transit_gateway.enable_transit_firenet == true
+    error_message = "Firenet is not enabled on the transit module. Set enable_transit_firenet to true."
+  }
 }
 
-variable "name" {
-  description = "Optionally provide a custom name for VPC and Gateway resources."
+variable "instance_size" {
+  description = "Instance size for the NGFW's"
   type        = string
-  default     = ""
-}
-
-variable "fw_instance_size" {
-  description = "AWS Instance size for the NGFW's"
-  type        = string
-  default     = "c5.xlarge"
+  default     = null
 }
 
 variable "fw_amount" {
   description = "Integer that determines the amount of NGFW instances to launch"
   type        = number
   default     = 2
+}
+
+variable "username" {
+  description = "Username to be configured for NGFW instance"
+  type        = string
+  default     = null
 }
 
 variable "attached" {
@@ -146,24 +145,45 @@ variable "custom_fw_names" {
 }
 
 locals {
-  transit_gateway         = var.transit_module.transit_gateway
-  region                  = var.transit_module.vpc.region
-  vpc                     = var.transit_module.vpc
-  account                 = var.transit_module.transit_gateway.account_name
-  lower_name              = length(var.name) > 0 ? replace(lower(var.name), " ", "-") : replace(lower(local.region), " ", "-")
-  is_palo                 = length(regexall("palo", lower(var.firewall_image))) > 0     #Check if fw image is palo. Needs special handling for management_subnet (CP & Fortigate null)
-  is_aviatrix             = length(regexall("aviatrix", lower(var.firewall_image))) > 0 #Check if fw image is Aviatrix FQDN Egress
-  name                    = local.lower_name
-  bootstrap_bucket_name_2 = length(var.bootstrap_bucket_name_2) > 0 ? var.bootstrap_bucket_name_2 : var.bootstrap_bucket_name_1 #If bucket 2 name is not provided, fallback to bucket 1.
-  iam_role_2              = length(var.iam_role_2) > 0 ? var.iam_role_2 : var.iam_role_1                                        #If IAM role 2 name is not provided, fallback to IAM role 1.
-  user_data_2             = length(var.user_data_2) > 0 ? var.user_data_2 : var.user_data_1                                     #If user data 2 name is not provided, fallback to user data 1.
-  use_custom_fw_names     = length(var.custom_fw_names) > 0
-  egress_subnet_1         = local.vpc.subnets[1].cidr
-  egress_subnet_2         = local.single_az_mode ? local.vpc.subnets[1].cidr : local.vpc.subnets[3].cidr
-  single_az_mode          = false
-  single_az_ha            = true
-  ha_gw                   = true
-  az1                     = "a"
-  az2                     = "b"
+  transit_gateway               = var.transit_module.transit_gateway
+  region                        = var.transit_module.vpc.region
+  vpc                           = var.transit_module.vpc
+  account                       = var.transit_module.transit_gateway.account_name
+  is_checkpoint                 = length(regexall("checkpoint", lower(var.firewall_image))) > 0                                       #Check if fw image is palo. Needs special handling for management_subnet (CP & Fortigate null)
+  is_palo                       = length(regexall("palo", lower(var.firewall_image))) > 0                                             #Check if fw image is palo. Needs special handling for management_subnet (CP & Fortigate null)
+  is_aviatrix                   = length(regexall("aviatrix", lower(var.firewall_image))) > 0                                         #Check if fw image is Aviatrix FQDN Egress
+  bootstrap_bucket_name_2       = length(var.bootstrap_bucket_name_2) > 0 ? var.bootstrap_bucket_name_2 : var.bootstrap_bucket_name_1 #If bucket 2 name is not provided, fallback to bucket 1.
+  iam_role_2                    = length(var.iam_role_2) > 0 ? var.iam_role_2 : var.iam_role_1                                        #If IAM role 2 name is not provided, fallback to IAM role 1.
+  user_data_2                   = length(var.user_data_2) > 0 ? var.user_data_2 : var.user_data_1                                     #If user data 2 name is not provided, fallback to user data 1.
+  egress_subnet_1               = local.vpc.public_subnets[1].cidr
+  egress_subnet_2               = local.single_az_mode ? local.vpc.public_subnets[1].cidr : local.vpc.public_subnets[3].cidr
+  single_az_mode                = var.transit_module.mc_firenet_details.single_az_mode
+  single_az_ha                  = var.transit_module.mc_firenet_details.single_az_ha
+  ha_gw                         = var.transit_module.mc_firenet_details.ha_gw
+  az1                           = var.transit_module.mc_firenet_details.az1
+  az2                           = var.transit_module.mc_firenet_details.az2
+  name                          = var.transit_module.mc_firenet_details.name
+  cloud                         = var.transit_module.mc_firenet_details.cloud
+  enable_transit_firenet        = var.transit_module.transit_gateway.enable_transit_firenet
   enable_egress_transit_firenet = var.transit_module.transit_gateway.enable_egress_transit_firenet
+
+  #Determine firewall image version
+  firewall_image_data     = [for i in data.aviatrix_firewall_instance_images.fw_images.firewall_images.* : i if i.firewall_image == var.firewall_image]
+  latest_firewall_version = local.firewall_image_data[0].firewall_image_version[0]
+  firewall_image_version  = coalesce(var.firewall_image_version, local.latest_firewall_version)
+
+  #Determine firewall instance size
+  instance_size = coalesce(var.instance_size, lookup(local.instance_size_map, local.cloud, null))
+  instance_size_map = {
+    azure = "Standard_D3_v2",
+    aws   = "c5.xlarge",
+    gcp   = "n1-standard-4",
+    oci   = "VM.Standard2.4",
+  }
+
+  #Determine firewall username
+  username = coalesce(var.username, lookup(local.username_map, local.cloud, null))
+  username_map = {
+    azure = local.is_checkpoint ? "admin" : "fwadmin",
+  }
 }
