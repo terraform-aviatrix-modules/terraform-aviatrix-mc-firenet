@@ -90,13 +90,7 @@ variable "use_gwlb" {
 }
 
 variable "tags" {
-  description = "Map of tags to assign to the gateway."
-  type        = map(string)
-  default     = null
-}
-
-variable "fw_tags" {
-  description = "Map of tags to assign to the firewall or FQDN egress gw's."
+  description = "Map of tags to assign to the firewall instances."
   type        = map(string)
   default     = null
 }
