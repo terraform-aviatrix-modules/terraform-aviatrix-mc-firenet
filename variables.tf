@@ -7,7 +7,7 @@ variable "transit_module" {
   }
 
   validation {
-    contains(["aws", "azure", ], var.transit_module.mc_firenet_details.cloud)
+    condition     = contains(["aws", "azure", ], var.transit_module.mc_firenet_details.cloud)
     error_message = "Currently only AWS and Azure are supported. GCP and OCI to be added soon."
   }
 }
