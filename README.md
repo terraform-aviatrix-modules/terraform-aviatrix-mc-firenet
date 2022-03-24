@@ -2,6 +2,7 @@
 
 ### Description
 Aviatrix Terraform module for firenet deployment in multiple clouds, to be used in conjunction with [mc-transit module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit).
+Initial support for AWS and Azure. Soon to be expanded to GCP and OCI.
 
 ### Diagram
 \<Provide a diagram of the high level constructs thet will be created by this module>
@@ -10,7 +11,7 @@ Aviatrix Terraform module for firenet deployment in multiple clouds, to be used 
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version | [mc-transit module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit) version
 :--- | :--- | :--- | :--- | :---
-v1.0.0 | >=1.0 | >=6.5 | >=2.20.3 | >=v2.0.0
+v1.0.0 | >=1.0 | >=6.6 | >=2.21.1 | >=v2.0.0
 
 ### Usage Example
 ```
@@ -54,3 +55,15 @@ This module will return the following outputs:
 key | description
 :---|:---
 \<keyname> | \<description of object that will be returned in this output>
+
+### Common Errors
+
+When using a firewall_image string that does not exist, a data lookup will fail and throw the error below. Make sure you are using a valid firewall_image. These can differ between clouds. Check the Aviatrix UI to see available firewall images.
+```
+│ Error: Invalid index
+│ 
+│   on variables.tf line 172:
+│   (source code not available)
+│ 
+│ The given key does not identify an element in this collection value: the collection has no elements.
+```

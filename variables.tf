@@ -5,6 +5,11 @@ variable "transit_module" {
     condition     = var.transit_module.transit_gateway.enable_transit_firenet == true
     error_message = "Firenet is not enabled on the transit module. Set enable_transit_firenet to true."
   }
+
+  validation {
+    contains(["aws", "azure", ], var.transit_module.mc_firenet_details.cloud)
+    error_message = "Currently only AWS and Azure are supported. GCP and OCI to be added soon."
+  }
 }
 
 variable "instance_size" {
