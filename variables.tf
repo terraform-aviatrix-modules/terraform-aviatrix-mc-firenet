@@ -24,12 +24,6 @@ variable "fw_amount" {
   default     = 2
 }
 
-variable "username" {
-  description = "Username to be configured for NGFW instance"
-  type        = string
-  default     = null
-}
-
 variable "attached" {
   description = "Boolean to determine if the spawned firewall instances will be attached on creation"
   type        = bool
@@ -143,17 +137,68 @@ variable "custom_fw_names" {
   default     = []
 }
 
+variable "username" {
+  description = "Username to be configured for NGFW instance"
+  type        = string
+  default     = null
+}
+
+variable "password" {
+  description = "Firewall instance password"
+  type        = string
+  default     = "Aviatrix#1234"
+}
+
+variable "bootstrap_storage_name_1" {
+  description = "The firewall bootstrap_storage_name"
+  type        = string
+  default     = null
+}
+
+variable "storage_access_key_1" {
+  description = "The storage_access_key to access the storage account"
+  type        = string
+  default     = null
+}
+
+variable "file_share_folder_1" {
+  description = "The file_share_folder containing the bootstrap files"
+  type        = string
+  default     = null
+}
+
+variable "bootstrap_storage_name_2" {
+  description = "The firewall bootstrap_storage_name"
+  type        = string
+  default     = ""
+}
+
+variable "storage_access_key_2" {
+  description = "The storage_access_key to access the storage account"
+  type        = string
+  default     = ""
+}
+
+variable "file_share_folder_2" {
+  description = "The file_share_folder containing the bootstrap files"
+  type        = string
+  default     = ""
+}
+
 locals {
   transit_gateway               = var.transit_module.transit_gateway
   region                        = var.transit_module.vpc.region
   vpc                           = var.transit_module.vpc
   account                       = var.transit_module.transit_gateway.account_name
-  is_checkpoint                 = length(regexall("checkpoint", lower(var.firewall_image))) > 0                                       #Check if fw image is palo. Needs special handling for management_subnet (CP & Fortigate null)
-  is_palo                       = length(regexall("palo", lower(var.firewall_image))) > 0                                             #Check if fw image is palo. Needs special handling for management_subnet (CP & Fortigate null)
-  is_aviatrix                   = length(regexall("aviatrix", lower(var.firewall_image))) > 0                                         #Check if fw image is Aviatrix FQDN Egress
-  bootstrap_bucket_name_2       = length(var.bootstrap_bucket_name_2) > 0 ? var.bootstrap_bucket_name_2 : var.bootstrap_bucket_name_1 #If bucket 2 name is not provided, fallback to bucket 1.
-  iam_role_2                    = length(var.iam_role_2) > 0 ? var.iam_role_2 : var.iam_role_1                                        #If IAM role 2 name is not provided, fallback to IAM role 1.
-  user_data_2                   = length(var.user_data_2) > 0 ? var.user_data_2 : var.user_data_1                                     #If user data 2 name is not provided, fallback to user data 1.
+  is_checkpoint                 = length(regexall("checkpoint", lower(var.firewall_image))) > 0                                          #Check if fw image is palo. Needs special handling for management_subnet (CP & Fortigate null)
+  is_palo                       = length(regexall("palo", lower(var.firewall_image))) > 0                                                #Check if fw image is palo. Needs special handling for management_subnet (CP & Fortigate null)
+  is_aviatrix                   = length(regexall("aviatrix", lower(var.firewall_image))) > 0                                            #Check if fw image is Aviatrix FQDN Egress
+  bootstrap_bucket_name_2       = length(var.bootstrap_bucket_name_2) > 0 ? var.bootstrap_bucket_name_2 : var.bootstrap_bucket_name_1    #If bucket 2 name is not provided, fallback to bucket 1.
+  iam_role_2                    = length(var.iam_role_2) > 0 ? var.iam_role_2 : var.iam_role_1                                           #If IAM role 2 name is not provided, fallback to IAM role 1.
+  user_data_2                   = length(var.user_data_2) > 0 ? var.user_data_2 : var.user_data_1                                        #If user data 2 name is not provided, fallback to user data 1.
+  bootstrap_storage_name_2      = length(var.bootstrap_storage_name_2) > 0 ? var.bootstrap_storage_name_2 : var.bootstrap_storage_name_1 #If storage 2 name is not provided, fallback to storage name 1.
+  storage_access_key_2          = length(var.storage_access_key_2) > 0 ? var.storage_access_key_2 : var.storage_access_key_1             #If storage 1 key is not provided, fallback to storage key 1.
+  file_share_folder_2           = length(var.file_share_folder_2) > 0 ? var.file_share_folder_2 : var.file_share_folder_1                #If storage 2 folder is not provided, fallback to folder 1.
   egress_subnet_1               = local.vpc.public_subnets[1].cidr
   egress_subnet_2               = local.single_az_mode ? local.vpc.public_subnets[1].cidr : local.vpc.public_subnets[3].cidr
   single_az_mode                = var.transit_module.mc_firenet_details.single_az_mode
@@ -185,4 +230,6 @@ locals {
   username_map = {
     azure = local.is_checkpoint ? "admin" : "fwadmin",
   }
+
+  password = local.cloud = "azure" ? var.password : null
 }

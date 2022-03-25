@@ -8,14 +8,20 @@ resource "aviatrix_firewall_instance" "firewall_instance" {
   firewall_image_version = local.firewall_image_version
   egress_subnet          = local.egress_subnet_1
   firenet_gw_name        = local.transit_gateway.gw_name
-  iam_role               = var.iam_role_1
-  bootstrap_bucket_name  = var.bootstrap_bucket_name_1
   management_subnet      = local.is_palo ? local.vpc.subnets[0].cidr : null
   zone                   = var.use_gwlb ? local.az1 : null
   firewall_image_id      = var.firewall_image_id
-  user_data              = var.user_data_1
   tags                   = var.tags
   username               = local.username
+  password               = local.password
+
+  #Bootstrapping
+  bootstrap_storage_name = var.bootstrap_storage_name_1
+  storage_access_key     = var.storage_access_key_1
+  file_share_folder      = var.file_share_folder_1  
+  user_data              = var.user_data_1
+  iam_role               = var.iam_role_1
+  bootstrap_bucket_name  = var.bootstrap_bucket_name_1
 }
 
 resource "aviatrix_firewall_instance" "firewall_instance_1" {
@@ -27,14 +33,20 @@ resource "aviatrix_firewall_instance" "firewall_instance_1" {
   firewall_image_version = local.firewall_image_version
   egress_subnet          = local.egress_subnet_1
   firenet_gw_name        = local.transit_gateway.gw_name
-  iam_role               = var.iam_role_1
-  bootstrap_bucket_name  = var.bootstrap_bucket_name_1
   management_subnet      = local.is_palo ? local.vpc.subnets[0].cidr : null
   zone                   = var.use_gwlb ? local.az1 : null
   firewall_image_id      = var.firewall_image_id
-  user_data              = var.user_data_1
   tags                   = var.tags
   username               = local.username
+  password               = local.password
+
+  #Bootstrapping
+  bootstrap_storage_name = var.bootstrap_storage_name_1
+  storage_access_key     = var.storage_access_key_1
+  file_share_folder      = var.file_share_folder_1  
+  user_data              = var.user_data_1
+  iam_role               = var.iam_role_1
+  bootstrap_bucket_name  = var.bootstrap_bucket_name_1  
 }
 
 resource "aviatrix_firewall_instance" "firewall_instance_2" {
@@ -46,14 +58,20 @@ resource "aviatrix_firewall_instance" "firewall_instance_2" {
   firewall_image_version = local.firewall_image_version
   egress_subnet          = local.egress_subnet_2
   firenet_gw_name        = local.transit_gateway.ha_gw_name
-  iam_role               = local.iam_role_2
-  bootstrap_bucket_name  = local.bootstrap_bucket_name_2
   management_subnet      = local.is_palo ? (local.single_az_mode ? local.vpc.subnets[0].cidr : local.vpc.subnets[2].cidr) : null
   zone                   = var.use_gwlb ? local.az2 : null
   firewall_image_id      = var.firewall_image_id
-  user_data              = local.user_data_2
   tags                   = var.tags
   username               = local.username
+  password               = local.password
+
+  #Bootstrapping
+  bootstrap_storage_name = local.bootstrap_storage_name_2
+  storage_access_key     = local.storage_access_key_2
+  file_share_folder      = local.file_share_folder_2  
+  user_data              = local.user_data_2
+  iam_role               = local.iam_role_2
+  bootstrap_bucket_name  = local.bootstrap_bucket_name_2    
 }
 
 #FQDN Egress filtering instances
