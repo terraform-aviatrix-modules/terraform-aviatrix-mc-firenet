@@ -231,5 +231,5 @@ locals {
     azure = local.is_checkpoint ? "admin" : "fwadmin",
   }
 
-  password = local.cloud = "azure" ? var.password : null
+  password = local.cloud == "azure" ? var.password : null
 }
