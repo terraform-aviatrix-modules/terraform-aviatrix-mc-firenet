@@ -70,15 +70,16 @@ user_data_2 | <img src="https://github.com/terraform-aviatrix-modules/terraform-
 username | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/img/azure.png?raw=true" title="Azure"> | fwadmin | Applicable to Azure or AzureGov deployment only. "admin" as a username is not accepted. (For Checkpoint it is always admin)
 
 ### Outputs
-This module will return the following outputs:
+This module will return the following objects:
 
 key | description
-:---|:---
-\<keyname> | \<description of object that will be returned in this output>
+:--- | :---
+[aviatrix_firenet](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firenet) | The created Aviatrix firenet object with all of it's attributes.
+[aviatrix_firewall_instance](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance) | A list of the created firewall instances and their attributes.
 
 ### Common Errors
 
-When using a firewall_image string that does not exist, a data lookup will fail and throw the error below. Make sure you are using a valid firewall_image. These can differ between clouds. Check the Aviatrix UI to see available firewall images.
+When using a firewall_image string that does not exist, a data lookup will fail and throw the error below. Make sure you are using a valid firewall_image. These can differ between clouds. Check the Aviatrix controllr UI to see available firewall images.
 ```
 │ Error: Invalid index
 │ 
