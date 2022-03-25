@@ -18,7 +18,7 @@ resource "aviatrix_firewall_instance" "firewall_instance" {
   #Bootstrapping
   bootstrap_storage_name = var.bootstrap_storage_name_1
   storage_access_key     = var.storage_access_key_1
-  file_share_folder      = var.file_share_folder_1  
+  file_share_folder      = var.file_share_folder_1
   user_data              = var.user_data_1
   iam_role               = var.iam_role_1
   bootstrap_bucket_name  = var.bootstrap_bucket_name_1
@@ -43,10 +43,10 @@ resource "aviatrix_firewall_instance" "firewall_instance_1" {
   #Bootstrapping
   bootstrap_storage_name = var.bootstrap_storage_name_1
   storage_access_key     = var.storage_access_key_1
-  file_share_folder      = var.file_share_folder_1  
+  file_share_folder      = var.file_share_folder_1
   user_data              = var.user_data_1
   iam_role               = var.iam_role_1
-  bootstrap_bucket_name  = var.bootstrap_bucket_name_1  
+  bootstrap_bucket_name  = var.bootstrap_bucket_name_1
 }
 
 resource "aviatrix_firewall_instance" "firewall_instance_2" {
@@ -68,10 +68,10 @@ resource "aviatrix_firewall_instance" "firewall_instance_2" {
   #Bootstrapping
   bootstrap_storage_name = local.bootstrap_storage_name_2
   storage_access_key     = local.storage_access_key_2
-  file_share_folder      = local.file_share_folder_2  
+  file_share_folder      = local.file_share_folder_2
   user_data              = local.user_data_2
   iam_role               = local.iam_role_2
-  bootstrap_bucket_name  = local.bootstrap_bucket_name_2    
+  bootstrap_bucket_name  = local.bootstrap_bucket_name_2
 }
 
 #FQDN Egress filtering instances
