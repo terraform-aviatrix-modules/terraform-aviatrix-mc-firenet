@@ -232,4 +232,9 @@ locals {
   }
 
   password = local.cloud == "azure" ? var.password : null
+
+  #Determine FW Amount
+  fw_amount_per_instance = var.fw_amount / 2
+  fw_amount_instance_1   = local.ha_gw ? local.fw_amount_per_instance : 1
+  fw_amount_instance_2   = local.ha_gw ? local.fw_amount_per_instance : 0
 }
