@@ -79,7 +79,7 @@ resource "aviatrix_firewall_instance" "firewall_instance_2" {
   availability_domain    = local.ha_availability_domain
   fault_domain           = local.ha_fault_domain
   management_vpc_id      = local.is_palo && local.cloud == "gcp" ? aviatrix_vpc.management_vpc[0].vpc_id : null
-  egress_vpc_id          = local.cloud == "gcp" ? aviatrix_vpc.egress_vpc[0].vpc_id : null  
+  egress_vpc_id          = local.cloud == "gcp" ? aviatrix_vpc.egress_vpc[0].vpc_id : null
 
   #Bootstrapping
   bootstrap_storage_name = local.bootstrap_storage_name_2
