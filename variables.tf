@@ -7,8 +7,8 @@ variable "transit_module" {
   }
 
   validation {
-    condition     = contains(["aws", "azure", ], var.transit_module.mc_firenet_details.cloud)
-    error_message = "Currently only AWS and Azure are supported. GCP and OCI to be added soon."
+    condition     = contains(["aws", "azure", "gcp", "oci"], var.transit_module.mc_firenet_details.cloud)
+    error_message = "Currently only AWS, Azure, GCP and OCI are supported."
   }
 }
 
@@ -185,31 +185,145 @@ variable "file_share_folder_2" {
   default     = ""
 }
 
+variable "mgmt_cidr" {
+  description = "The CIDR range to be used for the Management VPC for Firenet in GCP"
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = var.mgmt_cidr != "" ? can(cidrnetmask(var.mgmt_cidr)) : true
+    error_message = "This does not like a valid CIDR."
+  }
+}
+
+variable "egress_cidr" {
+  description = "The CIDR range to be used for the Egress VPC for Firenet in GCP"
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = var.egress_cidr != "" ? can(cidrnetmask(var.egress_cidr)) : true
+    error_message = "This does not like a valid CIDR."
+  }
+}
+
 locals {
+  #Gather transit module details in locals, for easy reference
   transit_gateway               = var.transit_module.transit_gateway
-  region                        = var.transit_module.vpc.region
   vpc                           = var.transit_module.vpc
   account                       = var.transit_module.transit_gateway.account_name
-  is_checkpoint                 = length(regexall("checkpoint", lower(var.firewall_image))) > 0                                          #Check if fw image is palo. Needs special handling for management_subnet (CP & Fortigate null)
-  is_palo                       = length(regexall("palo", lower(var.firewall_image))) > 0                                                #Check if fw image is palo. Needs special handling for management_subnet (CP & Fortigate null)
-  is_aviatrix                   = length(regexall("aviatrix", lower(var.firewall_image))) > 0                                            #Check if fw image is Aviatrix FQDN Egress
-  bootstrap_bucket_name_2       = length(var.bootstrap_bucket_name_2) > 0 ? var.bootstrap_bucket_name_2 : var.bootstrap_bucket_name_1    #If bucket 2 name is not provided, fallback to bucket 1.
-  iam_role_2                    = length(var.iam_role_2) > 0 ? var.iam_role_2 : var.iam_role_1                                           #If IAM role 2 name is not provided, fallback to IAM role 1.
-  user_data_2                   = length(var.user_data_2) > 0 ? var.user_data_2 : var.user_data_1                                        #If user data 2 name is not provided, fallback to user data 1.
-  bootstrap_storage_name_2      = length(var.bootstrap_storage_name_2) > 0 ? var.bootstrap_storage_name_2 : var.bootstrap_storage_name_1 #If storage 2 name is not provided, fallback to storage name 1.
-  storage_access_key_2          = length(var.storage_access_key_2) > 0 ? var.storage_access_key_2 : var.storage_access_key_1             #If storage 1 key is not provided, fallback to storage key 1.
-  file_share_folder_2           = length(var.file_share_folder_2) > 0 ? var.file_share_folder_2 : var.file_share_folder_1                #If storage 2 folder is not provided, fallback to folder 1.
-  egress_subnet_1               = local.vpc.public_subnets[1].cidr
-  egress_subnet_2               = local.single_az_mode ? local.vpc.public_subnets[1].cidr : local.vpc.public_subnets[3].cidr
+  region                        = var.transit_module.mc_firenet_details.region
+  ha_region                     = var.transit_module.mc_firenet_details.ha_region
   single_az_mode                = var.transit_module.mc_firenet_details.single_az_mode
   single_az_ha                  = var.transit_module.mc_firenet_details.single_az_ha
   ha_gw                         = var.transit_module.mc_firenet_details.ha_gw
   az1                           = var.transit_module.mc_firenet_details.az1
   az2                           = var.transit_module.mc_firenet_details.az2
+  zone                          = var.transit_module.mc_firenet_details.zone
+  ha_zone                       = var.transit_module.mc_firenet_details.ha_zone
   name                          = var.transit_module.mc_firenet_details.name
   cloud                         = var.transit_module.mc_firenet_details.cloud
+  availability_domain           = var.transit_module.mc_firenet_details.availability_domain
+  fault_domain                  = var.transit_module.mc_firenet_details.fault_domain
+  ha_availability_domain        = var.transit_module.mc_firenet_details.ha_availability_domain
+  ha_fault_domain               = var.transit_module.mc_firenet_details.ha_fault_domain
+  lan_vpc                       = var.transit_module.mc_firenet_details.lan_vpc
   enable_transit_firenet        = var.transit_module.transit_gateway.enable_transit_firenet
   enable_egress_transit_firenet = var.transit_module.transit_gateway.enable_egress_transit_firenet
+
+  is_checkpoint            = length(regexall("checkpoint", lower(var.firewall_image))) > 0                                          #Check if fw image is Checkpoint. Needs special handling for username in Azure
+  is_palo                  = length(regexall("palo", lower(var.firewall_image))) > 0                                                #Check if fw image is palo. Needs special handling for management_subnet (CP & Fortigate null)
+  is_aviatrix              = length(regexall("aviatrix", lower(var.firewall_image))) > 0                                            #Check if fw image is Aviatrix FQDN Egress
+  bootstrap_bucket_name_2  = length(var.bootstrap_bucket_name_2) > 0 ? var.bootstrap_bucket_name_2 : var.bootstrap_bucket_name_1    #If bucket 2 name is not provided, fallback to bucket 1.
+  iam_role_2               = length(var.iam_role_2) > 0 ? var.iam_role_2 : var.iam_role_1                                           #If IAM role 2 name is not provided, fallback to IAM role 1.
+  user_data_2              = length(var.user_data_2) > 0 ? var.user_data_2 : var.user_data_1                                        #If user data 2 name is not provided, fallback to user data 1.
+  bootstrap_storage_name_2 = length(var.bootstrap_storage_name_2) > 0 ? var.bootstrap_storage_name_2 : var.bootstrap_storage_name_1 #If storage 2 name is not provided, fallback to storage name 1.
+  storage_access_key_2     = length(var.storage_access_key_2) > 0 ? var.storage_access_key_2 : var.storage_access_key_1             #If storage 1 key is not provided, fallback to storage key 1.
+  file_share_folder_2      = length(var.file_share_folder_2) > 0 ? var.file_share_folder_2 : var.file_share_folder_1                #If storage 2 folder is not provided, fallback to folder 1.
+
+  #Customize vpc_id per cloud
+  vpc_id = lookup(local.vpc_id_map, local.cloud, local.vpc.vpc_id)
+  vpc_id_map = {
+    gcp = format("%s~-~%s", local.vpc.vpc_id, data.aviatrix_account.default.gcloud_project_id)
+    oci = local.vpc.name
+  }
+
+  #Determine egress subnets
+  gcp_egress_subnet = local.cloud == "gcp" ? format("%s~~%s~~%s", aviatrix_vpc.egress_vpc[0].subnets[0].cidr, aviatrix_vpc.egress_vpc[0].subnets[0].region, aviatrix_vpc.egress_vpc[0].subnets[0].name) : null
+
+  egress_subnet_1 = (
+    (local.cloud == "gcp" ?
+      local.gcp_egress_subnet
+      :
+      local.vpc.public_subnets[local.egress_subnet_map[local.cloud]].cidr
+    )
+  )
+
+  egress_subnet_2 = (
+    (local.single_az_mode ?
+      local.egress_subnet_1
+      :
+      (local.cloud == "gcp" ?
+        local.gcp_egress_subnet
+        :
+        local.vpc.public_subnets[local.egress_ha_subnet_map[local.cloud]].cidr
+      )
+    )
+  )
+
+  egress_subnet_map = {
+    azure = 0,
+    aws   = 1,
+    oci   = 2,
+  }
+
+  egress_ha_subnet_map = {
+    azure = 1,
+    aws   = 3,
+    oci   = 0,
+  }
+
+  #Determine mgmt subnets
+  gcp_mgmt_subnet = local.cloud == "gcp" && local.is_palo ? format("%s~~%s~~%s", aviatrix_vpc.management_vpc[0].subnets[0].cidr, aviatrix_vpc.management_vpc[0].subnets[0].region, aviatrix_vpc.management_vpc[0].subnets[0].name) : null
+  mgmt_subnet_1 = (
+    (local.is_palo ?
+      (local.cloud == "gcp" ?
+        local.gcp_mgmt_subnet
+        :
+        local.vpc.public_subnets[local.mgmt_subnet_map[local.cloud]].cidr
+      )
+      :
+      null
+    )
+  )
+
+  mgmt_subnet_2 = (
+    (local.is_palo ?
+      (local.single_az_mode ?
+        local.mgmt_subnet_1
+        :
+        (local.cloud == "gcp" ?
+          local.gcp_mgmt_subnet
+          :
+          local.vpc.public_subnets[local.mgmt_ha_subnet_map[local.cloud]].cidr
+        )
+      )
+      :
+      null
+    )
+  )
+
+  mgmt_subnet_map = {
+    azure = 2,
+    aws   = 0,
+    oci   = 3,
+  }
+
+  mgmt_ha_subnet_map = {
+    azure = 3,
+    aws   = 2,
+    oci   = 1,
+  }
 
   #Determine firewall image version
   firewall_image_data     = [for i in data.aviatrix_firewall_instance_images.fw_images.firewall_images.* : i if i.firewall_image == var.firewall_image]
@@ -217,7 +331,7 @@ locals {
   firewall_image_version  = coalesce(var.firewall_image_version, local.latest_firewall_version)
 
   #Determine firewall instance size
-  instance_size = coalesce(var.instance_size, lookup(local.instance_size_map, local.cloud, null))
+  instance_size = coalesce(var.instance_size, local.instance_size_map[local.cloud])
   instance_size_map = {
     azure = "Standard_D3_v2",
     aws   = "c5.xlarge",
@@ -225,7 +339,7 @@ locals {
     oci   = "VM.Standard2.4",
   }
 
-  #Determine firewall username
+  #Determine firewall username and password
   username = var.username == null ? lookup(local.username_map, local.cloud, null) : var.username
   username_map = {
     azure = local.is_checkpoint ? "admin" : "fwadmin",
