@@ -9,9 +9,11 @@ Initial support for AWS and Azure. Soon to be expanded to GCP and OCI.
 <img src="<IMG URL>"  height="250">
 
 ### Compatibility
-Module version | Terraform version | Controller version | Terraform provider version | [mc-transit module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet) version
+Module version | Terraform version | Controller version | Terraform provider version | [mc-transit module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit) version
 :--- | :--- | :--- | :--- | :---
-v1.0.0 | >=1.0 | >=6.6 | >=2.21.1 | >=v2.0.0
+v1.0.0 | >=1.0 | >=6.6 | >=2.21.1-6.6-ga | >=v2.0.0
+
+Check [release notes](RELEASE_NOTES.md) for more details.
 
 ### Usage Example
 ```
