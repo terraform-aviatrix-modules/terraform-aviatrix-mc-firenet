@@ -90,7 +90,7 @@ key | description
 
 ### Common Errors
 
-When using a firewall_image string that does not exist, a data lookup will fail and throw the error below. Make sure you are using a valid firewall_image. These can differ between clouds. Check the Aviatrix controllr UI to see available firewall images.
+When using a firewall_image string that does not exist, a data lookup will fail and throw the error below. Make sure you are using a valid firewall_image. These can differ between clouds. Check the Aviatrix controller UI to see available firewall images.
 ```
 │ Error: Invalid index
 │ 
