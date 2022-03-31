@@ -2,7 +2,6 @@
 
 ### Description
 Aviatrix Terraform module for firenet deployment in multiple clouds, to be used in conjunction with [mc-transit module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet).
-Initial support for AWS and Azure. Soon to be expanded to GCP and OCI.
 
 ### Diagram
 \<Provide a diagram of the high level constructs thet will be created by this module>
