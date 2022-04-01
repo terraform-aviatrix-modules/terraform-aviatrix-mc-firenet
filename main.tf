@@ -59,6 +59,12 @@ resource "aviatrix_firewall_instance" "firewall_instance_1" {
   user_data              = var.user_data_1
   iam_role               = var.iam_role_1
   bootstrap_bucket_name  = var.bootstrap_bucket_name_1
+
+  lifecycle {
+    ignore_changes = [
+      firewall_image_version,
+    ]
+  }
 }
 
 resource "aviatrix_firewall_instance" "firewall_instance_2" {
@@ -71,7 +77,7 @@ resource "aviatrix_firewall_instance" "firewall_instance_2" {
   egress_subnet          = local.egress_subnet_2
   firenet_gw_name        = local.transit_gateway.ha_gw_name
   management_subnet      = local.mgmt_subnet_2
-  zone                   = var.use_gwlb ? local.az2 : (local.cloud == "gcp" ? local.ha_region : null)
+  zone                   = var.use_gwlb ? local.az2 : (local.cloud == "gcp" ? local.ha_zone : null)
   firewall_image_id      = var.firewall_image_id
   tags                   = var.tags
   username               = local.username
@@ -88,6 +94,12 @@ resource "aviatrix_firewall_instance" "firewall_instance_2" {
   user_data              = local.user_data_2
   iam_role               = local.iam_role_2
   bootstrap_bucket_name  = local.bootstrap_bucket_name_2
+
+  lifecycle {
+    ignore_changes = [
+      firewall_image_version,
+    ]
+  }  
 }
 
 #FQDN Egress filtering instances

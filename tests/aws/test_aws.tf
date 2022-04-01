@@ -10,7 +10,7 @@ terraform {
 }
 
 module "transit_non_ha_aws" {
-  source = "git@github.com:terraform-aviatrix-modules/terraform-aviatrix-mc-transit.git" #Needs to be version pinned after mc-transit 2.0 release
+  source = "git::https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit.git" #Needs to be version pinned after mc-transit 2.0 release
 
   cloud                  = "aws"
   name                   = "transit-non-ha-aws"
@@ -30,7 +30,7 @@ module "mc_firenet_non_ha_aws" {
 }
 
 module "transit_ha_aws" {
-  source = "git@github.com:terraform-aviatrix-modules/terraform-aviatrix-mc-transit.git" #Needs to be version pinned after mc-transit 2.0 release
+  source = "git::https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit.git" #Needs to be version pinned after mc-transit 2.0 release
 
   cloud                  = "aws"
   name                   = "transit-ha-aws"
@@ -49,7 +49,7 @@ module "mc_firenet_ha_aws" {
 }
 
 resource "test_assertions" "cloud_type_non_ha" {
-  component = "cloud_type_non_ha"
+  component = "cloud_type_non_ha_aws"
 
   equal "cloud_type_non_ha" {
     description = "Module output is equal to check map."
@@ -59,7 +59,7 @@ resource "test_assertions" "cloud_type_non_ha" {
 }
 
 resource "test_assertions" "cloud_type_ha" {
-  component = "cloud_type_ha"
+  component = "cloud_type_ha_aws"
 
   equal "cloud_type_ha" {
     description = "Module output is equal to check map."
