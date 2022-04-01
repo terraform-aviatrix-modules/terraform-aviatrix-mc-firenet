@@ -1,6 +1,7 @@
 ```
 module "transit_ha_aws" {
-  source = "git@github.com:terraform-aviatrix-modules/terraform-aviatrix-mc-transit.git" #Needs to be version pinned after mc-transit 2.0 release
+  source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
+  version = "v2.0.0"
 
   cloud                  = "aws"
   name                   = "transit-ha-aws"
@@ -11,7 +12,8 @@ module "transit_ha_aws" {
 }
 
 module "mc_firenet_ha_aws" {
-  source = "../.."
+  source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
+  version = "v1.0.0"
 
   transit_module = module.transit_ha_aws
   firewall_image = "Fortinet FortiGate Next-Generation Firewall"

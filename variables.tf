@@ -245,7 +245,6 @@ locals {
   vpc_id = lookup(local.vpc_id_map, local.cloud, local.vpc.vpc_id)
   vpc_id_map = {
     gcp = format("%s~-~%s", local.vpc.vpc_id, data.aviatrix_account.default.gcloud_project_id)
-    oci = local.vpc.name
   }
 
   #Determine egress subnets
