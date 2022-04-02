@@ -31,6 +31,16 @@ module "mc_firenet_non_ha_gcp" {
   egress_cidr    = "10.101.1.0/24"
 }
 
+variable "custom_fw_names" {
+  type = list(string)
+  default = [
+    "az1-fw1",
+    "az1-fw2",
+    "az2-fw1",
+    "az2-fw2",
+  ]
+}
+
 module "transit_ha_gcp" {
   source = "git::https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit.git" #Needs to be version pinned after mc-transit 2.0 release
 
@@ -52,22 +62,68 @@ module "mc_firenet_ha_gcp" {
   egress_cidr    = "10.102.1.0/24"
 }
 
-resource "test_assertions" "cloud_type_non_ha" {
-  component = "cloud_type_non_ha"
+#Add test assertions.
+# resource "test_assertions" "public_ip_non_ha" {
+#   component = "public_ip_non_ha_gcp"
 
-  equal "cloud_type_non_ha_gcp" {
-    description = "Module output is equal to check map."
-    got         = module.transit_non_ha_gcp.transit_gateway.cloud_type
-    want        = 4
-  }
-}
+#   check "fw_public_ip" {
+#     description = "NGFW has public IP"
+#     condition   = can(cidrnetmask("${module.mc_firenet_non_ha_gcp.aviatrix_firewall_instance[0].public_ip}/32"))
+#   }
+# }
 
-resource "test_assertions" "cloud_type_ha" {
-  component = "cloud_type_ha"
+# resource "test_assertions" "public_ip_ha" {
+#   component = "public_ip_ha_gcp"
 
-  equal "cloud_type_ha_gcp" {
-    description = "Module output is equal to check map."
-    got         = module.transit_ha_gcp.transit_gateway.cloud_type
-    want        = 4
-  }
-}
+#   check "fw1_public_ip" {
+#     description = "NGFW 1 has valid IP"
+#     condition   = can(cidrnetmask("${module.mc_firenet_ha_gcp.aviatrix_firewall_instance[0].public_ip}/32"))
+#   }
+
+#   check "fw2_public_ip" {
+#     description = "NGFW 2 has valid IP"
+#     condition   = can(cidrnetmask("${module.mc_firenet_ha_gcp.aviatrix_firewall_instance[1].public_ip}/32"))
+#   }
+# }
+
+# resource "test_assertions" "egress_subnet_allocation_non_ha" {
+#   component = "egress_subnet_allocation_non_ha_gcp"
+
+#   equal "egress_subnet_allocation_ngfw" {
+#     description = "Check NGFW is in correct egress subnet."
+#     got         = module.mc_firenet_non_ha_gcp.aviatrix_firewall_instance[0].egress_subnet
+#     want        = module.transit_non_ha_gcp.vpc.public_subnets[1].cidr
+#   }
+# }
+
+# resource "test_assertions" "egress_subnet_allocation_ha" {
+#   component = "egress_subnet_allocation_ha_gcp"
+
+#   equal "egress_subnet_allocation_ngfw1" {
+#     description = "Check NGFW 1 is in correct egress subnet."
+#     got         = module.mc_firenet_ha_gcp.aviatrix_firewall_instance[0].egress_subnet
+#     want        = module.transit_ha_gcp.vpc.public_subnets[1].cidr
+#   }
+
+#   equal "egress_subnet_allocation_ngfw2" {
+#     description = "Check NGFW 2 is in correct egress subnet."
+#     got         = module.mc_firenet_ha_gcp.aviatrix_firewall_instance[1].egress_subnet
+#     want        = module.transit_ha_gcp.vpc.public_subnets[1].cidr
+#   }
+# }
+
+# resource "test_assertions" "custom_fw_name_ha" {
+#   component = "custom_fw_name_ha_gcp"
+
+#   equal "custom_fw_name_ngfw1" {
+#     description = "Check NGFW 1 custom FW name."
+#     got         = module.mc_firenet_ha_gcp.aviatrix_firewall_instance[0].firewall_name
+#     want        = var.custom_fw_names[0]
+#   }
+
+#   equal "custom_fw_name_ngfw2" {
+#     description = "Check NGFW 2 custom FW name."
+#     got         = module.mc_firenet_ha_gcp.aviatrix_firewall_instance[1].firewall_name
+#     want        = var.custom_fw_names[1]
+#   }
+# }

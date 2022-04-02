@@ -62,7 +62,8 @@ resource "aviatrix_firewall_instance" "firewall_instance_1" {
 
   lifecycle {
     ignore_changes = [
-      firewall_image_version,
+      firewall_image_version, #Do not replace FW instance, when latest image version changes
+      firewall_size,          #Do not replace FW instance, after out of band resizing of instance
     ]
   }
 }
@@ -97,9 +98,10 @@ resource "aviatrix_firewall_instance" "firewall_instance_2" {
 
   lifecycle {
     ignore_changes = [
-      firewall_image_version,
+      firewall_image_version, #Do not replace FW instance, when latest image version changes
+      firewall_size,          #Do not replace FW instance, after out of band resizing of instance
     ]
-  }  
+  }
 }
 
 #FQDN Egress filtering instances
