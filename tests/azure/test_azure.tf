@@ -10,7 +10,8 @@ terraform {
 }
 
 module "transit_non_ha_azure" {
-  source = "git::https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit.git" #Needs to be version pinned after mc-transit 2.0 release
+  source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
+  version = "2.0.0"
 
   cloud                  = "azure"
   name                   = "transit-non-ha-azure"
@@ -40,7 +41,8 @@ variable "custom_fw_names" {
 }
 
 module "transit_ha_azure" {
-  source = "git::https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit.git" #Needs to be version pinned after mc-transit 2.0 release
+  source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
+  version = "2.0.0"
 
   cloud                  = "azure"
   name                   = "transit-ha-azure"

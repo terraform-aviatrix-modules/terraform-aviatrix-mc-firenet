@@ -10,7 +10,8 @@ terraform {
 }
 
 module "transit_non_ha_aws" {
-  source = "git::https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit.git" #Needs to be version pinned after mc-transit 2.0 release
+  source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
+  version = "2.0.0"
 
   cloud                  = "aws"
   name                   = "transit-non-ha-aws"
@@ -30,7 +31,8 @@ module "mc_firenet_non_ha_aws" {
 }
 
 module "transit_ha_aws" {
-  source = "git::https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit.git" #Needs to be version pinned after mc-transit 2.0 release
+  source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
+  version = "2.0.0"
 
   cloud                  = "aws"
   name                   = "transit-ha-aws"
