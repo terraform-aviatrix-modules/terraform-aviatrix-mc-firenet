@@ -231,7 +231,7 @@ locals {
   enable_transit_firenet        = var.transit_module.transit_gateway.enable_transit_firenet
   enable_egress_transit_firenet = var.transit_module.transit_gateway.enable_egress_transit_firenet
 
-  is_checkpoint            = length(regexall("checkpoint", lower(var.firewall_image))) > 0                                          #Check if fw image is Checkpoint. Needs special handling for username in Azure
+  is_checkpoint            = length(regexall("check point", lower(var.firewall_image))) > 0                                         #Check if fw image is Checkpoint. Needs special handling for username in Azure
   is_palo                  = length(regexall("palo", lower(var.firewall_image))) > 0                                                #Check if fw image is palo. Needs special handling for management_subnet (CP & Fortigate null)
   is_aviatrix              = length(regexall("aviatrix", lower(var.firewall_image))) > 0                                            #Check if fw image is Aviatrix FQDN Egress
   bootstrap_bucket_name_2  = length(var.bootstrap_bucket_name_2) > 0 ? var.bootstrap_bucket_name_2 : var.bootstrap_bucket_name_1    #If bucket 2 name is not provided, fallback to bucket 1.

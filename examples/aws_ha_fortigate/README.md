@@ -1,3 +1,6 @@
+In this example, the module deploys the transit VPC and a HA pair of Aviatrix transit gateways in AWS (mc-transit module).
+On top of that, Firenet is deployed with the mc-firenet module, deploying 2 FortiGate firewalls and enabling egress traffic to the internet.
+
 ```
 module "transit_ha_aws" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
