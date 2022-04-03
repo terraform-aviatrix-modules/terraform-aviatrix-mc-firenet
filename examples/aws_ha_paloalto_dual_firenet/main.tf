@@ -51,5 +51,5 @@ module "spoke_aws_1" {
   region            = "eu-central-1"
   account           = "AWS"
   transit_gw        = module.transit_ha_dual_firenet_aws_east_west.transit_gateway.gw_name
-  transit_gw_egress	= module.transit_ha_dual_firenet_aws_egress.transit_gateway.gw_name
+  transit_gw_egress = module.transit_ha_dual_firenet_aws_egress.transit_gateway.gw_name
 }
