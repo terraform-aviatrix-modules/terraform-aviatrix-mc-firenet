@@ -1,6 +1,6 @@
 data "aviatrix_account" "default" {
   account_name = local.account
-  
+
   depends_on = [
     local.account,
   ]
