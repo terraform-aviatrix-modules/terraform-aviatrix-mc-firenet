@@ -324,10 +324,10 @@ locals {
     oci   = 1,
   }
 
-  #Determine firewall image version
-  firewall_image_data     = [for i in data.aviatrix_firewall_instance_images.fw_images.firewall_images.* : i if i.firewall_image == var.firewall_image]
-  latest_firewall_version = local.firewall_image_data[0].firewall_image_version[0]
-  firewall_image_version  = coalesce(var.firewall_image_version, local.latest_firewall_version)
+  #Determine firewall image version if not Aviatrix FQDN egress GW
+  firewall_image_data     = local.is_aviatrix ? null : [for i in data.aviatrix_firewall_instance_images.fw_images.firewall_images.* : i if i.firewall_image == var.firewall_image]
+  latest_firewall_version = local.is_aviatrix ? null : local.firewall_image_data[0].firewall_image_version[0]
+  firewall_image_version  = local.is_aviatrix ? null : coalesce(var.firewall_image_version, local.latest_firewall_version)
 
   #Determine firewall instance size
   instance_size = coalesce(var.instance_size, local.instance_size_map[local.cloud])

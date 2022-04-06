@@ -62,6 +62,37 @@ module "mc_firenet_ha_aws" {
   custom_fw_names = var.custom_fw_names
 }
 
+module "transit_ha_aws_fqdn" {
+  source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
+  version = "2.0.0"
+
+  cloud                  = "aws"
+  name                   = "transit-ha-fqdn-aws"
+  region                 = "eu-central-1"
+  cidr                   = "10.3.0.0/23"
+  account                = "AWS"
+  enable_transit_firenet = true
+}
+
+variable "custom_fqdn_names" {
+  type = list(string)
+  default = [
+    "az1-fqdn1",
+    "az1-fqdn2",
+    "az2-fqdn3",
+    "az2-fqdn4",    
+  ]
+}
+
+module "mc_firenet_ha_aws_fqdn" {
+  source = "../.."
+
+  transit_module  = module.transit_ha_aws_fqdn
+  firewall_image  = "aviatrix"
+  fw_amount       = 4
+  #custom_fw_names = var.custom_fqdn_names
+}
+
 resource "test_assertions" "public_ip_non_ha" {
   component = "public_ip_non_ha_aws"
 
