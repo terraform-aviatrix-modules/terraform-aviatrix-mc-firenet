@@ -80,16 +80,16 @@ variable "custom_fqdn_names" {
     "az1-fqdn1",
     "az1-fqdn2",
     "az2-fqdn3",
-    "az2-fqdn4",    
+    "az2-fqdn4",
   ]
 }
 
 module "mc_firenet_ha_aws_fqdn" {
   source = "../.."
 
-  transit_module  = module.transit_ha_aws_fqdn
-  firewall_image  = "aviatrix"
-  fw_amount       = 4
+  transit_module = module.transit_ha_aws_fqdn
+  firewall_image = "aviatrix"
+  fw_amount      = 4
   #custom_fw_names = var.custom_fqdn_names
 }
 
