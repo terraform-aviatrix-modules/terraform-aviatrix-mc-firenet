@@ -22,6 +22,11 @@ variable "fw_amount" {
   description = "Integer that determines the amount of NGFW instances to launch"
   type        = number
   default     = 2
+
+  validation {
+    condition     = var.fw_amount % 2 == 0
+    error_message = "Please set fw_amount to an even number. Odd numbers are not supported. If you just want to deploy a single NGFW instance, disabling ha_gw on the transit module will achieve that."
+  }  
 }
 
 variable "attached" {
