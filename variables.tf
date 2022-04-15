@@ -22,6 +22,7 @@ variable "fw_amount" {
   description = "Integer that determines the amount of NGFW instances to launch"
   type        = number
   default     = 2
+  nullable    = false
 
   validation {
     condition     = var.fw_amount % 2 == 0
@@ -33,6 +34,7 @@ variable "attached" {
   description = "Boolean to determine if the spawned firewall instances will be attached on creation"
   type        = bool
   default     = true
+  nullable    = false
 }
 
 variable "firewall_image" {
@@ -56,6 +58,7 @@ variable "iam_role_2" {
   description = "The IAM role for bootstrapping"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "bootstrap_bucket_name_1" {
@@ -68,24 +71,28 @@ variable "bootstrap_bucket_name_2" {
   description = "The firewall bootstrap bucket name for the odd firewalls (2,4,6 etc)"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "inspection_enabled" {
   description = "Set to false to disable inspection"
   type        = bool
   default     = true
+  nullable    = false
 }
 
 variable "egress_enabled" {
   description = "Set to true to enable egress on FW instances"
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "use_gwlb" {
   description = "Use AWS GWLB for NGFW integration"
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "tags" {
@@ -98,12 +105,14 @@ variable "egress_static_cidrs" {
   description = "List of egress static CIDRs."
   type        = list(string)
   default     = []
+  nullable    = false
 }
 
 variable "keep_alive_via_lan_interface_enabled" {
   description = "Enable Keep Alive via Firewall LAN Interface"
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "firewall_image_id" {
@@ -128,6 +137,7 @@ variable "user_data_2" {
   description = "User data for bootstrapping Fortigate and Checkpoint firewalls"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "east_west_inspection_excluded_cidrs" {
@@ -140,6 +150,7 @@ variable "custom_fw_names" {
   description = "If set, the NGFW instances will be deployed with these names. First half of the list for instances in az1, second half for az2."
   type        = list(string)
   default     = []
+  nullable    = false
 }
 
 variable "username" {
@@ -152,6 +163,7 @@ variable "password" {
   description = "Firewall instance password"
   type        = string
   default     = "Aviatrix#1234"
+  nullable    = false
 }
 
 variable "bootstrap_storage_name_1" {
@@ -176,24 +188,28 @@ variable "bootstrap_storage_name_2" {
   description = "The firewall bootstrap_storage_name"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "storage_access_key_2" {
   description = "The storage_access_key to access the storage account"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "file_share_folder_2" {
   description = "The file_share_folder containing the bootstrap files"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "mgmt_cidr" {
   description = "The CIDR range to be used for the Management VPC for Firenet in GCP"
   type        = string
   default     = ""
+  nullable    = false
 
   validation {
     condition     = var.mgmt_cidr != "" ? can(cidrnetmask(var.mgmt_cidr)) : true
@@ -205,6 +221,7 @@ variable "egress_cidr" {
   description = "The CIDR range to be used for the Egress VPC for Firenet in GCP"
   type        = string
   default     = ""
+  nullable    = false
 
   validation {
     condition     = var.egress_cidr != "" ? can(cidrnetmask(var.egress_cidr)) : true
