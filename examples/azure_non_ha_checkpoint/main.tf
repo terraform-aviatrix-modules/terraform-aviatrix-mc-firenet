@@ -13,7 +13,7 @@ module "transit_non_ha_azure" {
 
 module "mc_firenet_non_ha_azure" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "v1.0.0"
+  version = "v1.0.1"
 
   transit_module = module.transit_non_ha_azure
   firewall_image = "Check Point CloudGuard IaaS Single Gateway R80.40 - Pay As You Go (NGTP)"
