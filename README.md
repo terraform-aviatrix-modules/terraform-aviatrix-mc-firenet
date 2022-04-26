@@ -6,7 +6,7 @@ Aviatrix Terraform module for firenet deployment in multiple clouds, to be used 
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version | [mc-transit module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit) version
 :--- | :--- | :--- | :--- | :---
-v1.0.1 | >=0.13 | >=6.6.5545 | >=2.21.2 | >=v2.0.0
+v1.0.2 | >=0.13 | >=6.6.5545 | >=2.21.2 | >=v2.0.0
 
 Check [release notes](RELEASE_NOTES.md) for more details.
 
@@ -14,7 +14,7 @@ Check [release notes](RELEASE_NOTES.md) for more details.
 ```
 module "mc_transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "v2.0.0"
+  version = "v2.0.1"
 
   cloud                  = "AWS"
   cidr                   = "10.1.0.0/23"
@@ -25,7 +25,7 @@ module "mc_transit" {
 
 module "firenet_1" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "1.0.0"
+  version = "1.0.2"
 
   transit_module = module.mc_transit
   firewall_image = "Palo Alto Networks VM-Series Next-Generation Firewall Bundle 1"

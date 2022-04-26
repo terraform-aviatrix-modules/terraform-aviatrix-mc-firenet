@@ -1,5 +1,8 @@
 # terraform-aviatrix-mc-firenet release notes
 
+## v1.0.2
+- Fixed a bug where firewall instances in Azure were not deployed to AZ's (Credits: Andreas Krummrich, SVA)
+
 ## v1.0.1
 - Add examples
 - Add input validation for fw_amount
