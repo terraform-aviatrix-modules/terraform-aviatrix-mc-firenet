@@ -42,7 +42,7 @@ resource "aviatrix_firewall_instance" "firewall_instance_1" {
   egress_subnet          = local.egress_subnet_1
   firenet_gw_name        = local.transit_gateway.gw_name
   management_subnet      = local.mgmt_subnet_1
-  zone                   = var.use_gwlb ? local.az1 : (local.cloud == "gcp" ? local.zone : null)
+  zone                   = var.use_gwlb ? local.az1 : (contains(["azure", "gcp"], local.cloud) ? local.zone : null)
   firewall_image_id      = var.firewall_image_id
   tags                   = var.tags
   username               = local.username
@@ -78,7 +78,7 @@ resource "aviatrix_firewall_instance" "firewall_instance_2" {
   egress_subnet          = local.egress_subnet_2
   firenet_gw_name        = local.transit_gateway.ha_gw_name
   management_subnet      = local.mgmt_subnet_2
-  zone                   = var.use_gwlb ? local.az2 : (local.cloud == "gcp" ? local.ha_zone : null)
+  zone                   = var.use_gwlb ? local.az2 : (contains(["azure", "gcp"], local.cloud) ? local.ha_zone : null)
   firewall_image_id      = var.firewall_image_id
   tags                   = var.tags
   username               = local.username
