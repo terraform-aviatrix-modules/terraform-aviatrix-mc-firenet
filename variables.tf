@@ -229,6 +229,13 @@ variable "egress_cidr" {
   }
 }
 
+variable "associated" {
+  description = "Associate firewalls with transit gateway"
+  type        = bool
+  default     = true
+  nullable    = false
+}
+
 locals {
   #Gather transit module details in locals, for easy reference
   transit_gateway               = var.transit_module.transit_gateway

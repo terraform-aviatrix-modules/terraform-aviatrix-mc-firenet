@@ -155,7 +155,7 @@ resource "aviatrix_firenet" "firenet" {
 }
 
 resource "aviatrix_firewall_instance_association" "firenet_instance1" {
-  count                = local.fw_amount_instance_1
+  count                = var.associated ? local.fw_amount_instance_1 : 0
   vpc_id               = local.vpc_id
   firenet_gw_name      = local.transit_gateway.gw_name
   instance_id          = local.is_aviatrix ? aviatrix_gateway.egress_instance_1[count.index].gw_name : aviatrix_firewall_instance.firewall_instance_1[count.index].instance_id
@@ -168,7 +168,7 @@ resource "aviatrix_firewall_instance_association" "firenet_instance1" {
 }
 
 resource "aviatrix_firewall_instance_association" "firenet_instance2" {
-  count                = local.fw_amount_instance_2
+  count                = var.associated ? local.fw_amount_instance_2 : 0
   vpc_id               = local.vpc_id
   firenet_gw_name      = local.transit_gateway.ha_gw_name
   instance_id          = local.is_aviatrix ? aviatrix_gateway.egress_instance_2[count.index].gw_name : aviatrix_firewall_instance.firewall_instance_2[count.index].instance_id
