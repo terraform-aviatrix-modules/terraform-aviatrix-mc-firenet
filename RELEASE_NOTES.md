@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-firenet release notes
 
+## v1.1.0
+- Made module compatioble with controller version 6.7 and provider version 2.22.x.
+- Made firewall instance association conditional with new boolean argument `associated`.
+
 ## v1.0.2
 - Fixed a bug where firewall instances in Azure were not deployed to AZ's (Credits: Andreas Krummrich, SVA)
 
