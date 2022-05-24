@@ -270,12 +270,6 @@ locals {
   storage_access_key_2     = length(var.storage_access_key_2) > 0 ? var.storage_access_key_2 : var.storage_access_key_1             #If storage 1 key is not provided, fallback to storage key 1.
   file_share_folder_2      = length(var.file_share_folder_2) > 0 ? var.file_share_folder_2 : var.file_share_folder_1                #If storage 2 folder is not provided, fallback to folder 1.
 
-  #Customize vpc_id per cloud
-  vpc_id = lookup(local.vpc_id_map, local.cloud, local.vpc.vpc_id)
-  vpc_id_map = {
-    gcp = format("%s~-~%s", local.vpc.vpc_id, data.aviatrix_account.default.gcloud_project_id)
-  }
-
   #Determine egress subnets
   gcp_egress_subnet = local.cloud == "gcp" ? format("%s~~%s~~%s", aviatrix_vpc.egress_vpc[0].subnets[0].cidr, aviatrix_vpc.egress_vpc[0].subnets[0].region, aviatrix_vpc.egress_vpc[0].subnets[0].name) : null
 
