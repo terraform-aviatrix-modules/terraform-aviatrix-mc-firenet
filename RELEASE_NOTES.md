@@ -3,7 +3,7 @@
 ## v1.1.0
 - Made module compatioble with controller version 6.7 and provider version 2.22.x.
 - Made firewall instance association conditional with new boolean argument `associated`.
-- Resolved a bug where FQDN egress gateways could not be dpeloyed in other clouds than AWS.
+- Resolved a bug where FQDN egress gateways could not be deployed in other clouds than AWS.
 
 ## v1.0.2
 - Fixed a bug where firewall instances in Azure were not deployed to AZ's (Credits: Andreas Krummrich, SVA)
