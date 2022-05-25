@@ -107,7 +107,7 @@ resource "aviatrix_firewall_instance" "firewall_instance_2" {
 #FQDN Egress filtering instances
 resource "aviatrix_gateway" "egress_instance_1" {
   count               = local.is_aviatrix ? local.fw_amount_instance_1 : 0
-  cloud_type          = 1
+  cloud_type          = local.transit_gateway.cloud_type
   account_name        = local.account
   gw_name             = try(var.custom_fw_names[count.index], "${local.name}-az1-egress-gw${count.index + 1}")
   vpc_id              = local.vpc.vpc_id
@@ -122,7 +122,7 @@ resource "aviatrix_gateway" "egress_instance_1" {
 
 resource "aviatrix_gateway" "egress_instance_2" {
   count               = local.is_aviatrix ? local.fw_amount_instance_2 : 0
-  cloud_type          = 1
+  cloud_type          = local.transit_gateway.cloud_type
   account_name        = local.account
   gw_name             = try(var.custom_fw_names[length(var.custom_fw_names) / 2 + count.index], "${local.name}-az2-egress-gw${count.index + 1}")
   vpc_id              = local.vpc.vpc_id
