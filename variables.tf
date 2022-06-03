@@ -1,4 +1,5 @@
 variable "transit_module" {
+  type        = map(any)
   description = "Refer to the mc-transit module that built the transit. This module plugs directly into it's output to build firenet on top of it."
 
   validation {
