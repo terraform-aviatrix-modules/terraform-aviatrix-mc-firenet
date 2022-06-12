@@ -6,7 +6,7 @@ Aviatrix Terraform module for firenet deployment in multiple clouds, to be used 
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version | [mc-transit module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit) version
 :--- | :--- | :--- | :--- | :---
-v1.1.0 | >=1.10 | ~> 6.7.1186 | ~> 2.22.0 | ~> v2.1.0
+v1.1.1 | >=1.1.0 | ~> 6.7.1186 | ~> 2.22.0 | ~> v2.1.0
 
 Check [release notes](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/master/RELEASE_NOTES.md) for more details.
 Check [Compatibility list](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/master/COMPATIBILITY.md) for older versions.
@@ -15,7 +15,7 @@ Check [Compatibility list](https://github.com/terraform-aviatrix-modules/terrafo
 ```
 module "mc_transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "v2.1.1"
+  version = "v2.1.3"
 
   cloud                  = "AWS"
   cidr                   = "10.1.0.0/23"
@@ -38,7 +38,7 @@ The following variables are required:
 
 key | value
 :--- | :---
-[firewall_image](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance#firewall_image) | The firewall image to be used to deploy the NGFW's.
+[firewall_image](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance#firewall_image) | The firewall image to be used to deploy the NGFW's. Use "aviatrix" to deploy Aviatrix FQDN egress filtering GW's (AWS/Azure/GCP).
 transit_module | Refer to the mc-transit module that built the transit. This module plugs directly into it's output to build firenet on top of it.
 
 The following variables are optional:

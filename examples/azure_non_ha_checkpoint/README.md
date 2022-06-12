@@ -4,7 +4,7 @@ On top of that, Firenet is deployed with the mc-firenet module, deploying a sing
 ```
 module "transit_non_ha_azure" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "v2.0.0"
+  version = "v2.1.3"
 
   cloud                  = "azure"
   name                   = "transit-azure-non-ha"
@@ -17,7 +17,7 @@ module "transit_non_ha_azure" {
 
 module "mc_firenet_non_ha_azure" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "v1.1.0"
+  version = "v1.1.1"
 
   transit_module = module.transit_non_ha_azure
   firewall_image = "Check Point CloudGuard IaaS Single Gateway R80.40 - Pay As You Go (NGTP)"

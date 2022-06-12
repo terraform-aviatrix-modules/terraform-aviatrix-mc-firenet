@@ -271,49 +271,58 @@ locals {
   file_share_folder_2      = length(var.file_share_folder_2) > 0 ? var.file_share_folder_2 : var.file_share_folder_1                #If storage 2 folder is not provided, fallback to folder 1.
 
   #Determine egress subnets
-  gcp_egress_subnet = local.cloud == "gcp" ? format("%s~~%s~~%s", aviatrix_vpc.egress_vpc[0].subnets[0].cidr, aviatrix_vpc.egress_vpc[0].subnets[0].region, aviatrix_vpc.egress_vpc[0].subnets[0].name) : null
-
-  egress_subnet_1 = (
-    (local.cloud == "gcp" ?
-      local.gcp_egress_subnet
+  gcp_egress_subnet = (
+    local.cloud == "gcp" ?
+    (local.is_aviatrix ?
+      aviatrix_vpc.egress_vpc[0].subnets[0].cidr
       :
-      local.vpc.public_subnets[local.egress_subnet_map[local.cloud]].cidr
+      format("%s~~%s~~%s",
+        aviatrix_vpc.egress_vpc[0].subnets[0].cidr,
+        aviatrix_vpc.egress_vpc[0].subnets[0].region,
+        aviatrix_vpc.egress_vpc[0].subnets[0].name
+      )
     )
+    :
+    null
   )
 
+  egress_subnet_1 = local.egress_subnet_map[local.cloud]
   egress_subnet_2 = (
     (local.single_az_mode ?
       local.egress_subnet_1
       :
-      (local.cloud == "gcp" ?
-        local.gcp_egress_subnet
-        :
-        local.vpc.public_subnets[local.egress_ha_subnet_map[local.cloud]].cidr
-      )
+      local.egress_ha_subnet_map[local.cloud]
     )
   )
 
   egress_subnet_map = {
-    azure = 0,
-    aws   = 1,
-    oci   = 2,
+    azure = local.cloud == "azure" ? local.vpc.public_subnets[0].cidr : null,
+    aws   = local.cloud == "aws" ? local.vpc.public_subnets[1].cidr : null,
+    oci   = local.cloud == "oci" ? local.vpc.public_subnets[2].cidr : null,
+    gcp   = local.gcp_egress_subnet,
   }
 
   egress_ha_subnet_map = {
-    azure = 1,
-    aws   = 3,
-    oci   = 0,
+    azure = local.cloud == "azure" ? local.vpc.public_subnets[1].cidr : null,
+    aws   = local.cloud == "aws" ? local.vpc.public_subnets[3].cidr : null,
+    oci   = local.cloud == "oci" ? local.vpc.public_subnets[0].cidr : null,
+    gcp   = local.gcp_egress_subnet,
   }
 
   #Determine mgmt subnets
-  gcp_mgmt_subnet = local.cloud == "gcp" && local.is_palo ? format("%s~~%s~~%s", aviatrix_vpc.management_vpc[0].subnets[0].cidr, aviatrix_vpc.management_vpc[0].subnets[0].region, aviatrix_vpc.management_vpc[0].subnets[0].name) : null
+  gcp_mgmt_subnet = (local.cloud == "gcp" && local.is_palo ?
+    format("%s~~%s~~%s",
+      aviatrix_vpc.management_vpc[0].subnets[0].cidr,
+      aviatrix_vpc.management_vpc[0].subnets[0].region,
+      aviatrix_vpc.management_vpc[0].subnets[0].name
+    )
+    :
+    null
+  )
+
   mgmt_subnet_1 = (
     (local.is_palo ?
-      (local.cloud == "gcp" ?
-        local.gcp_mgmt_subnet
-        :
-        local.vpc.public_subnets[local.mgmt_subnet_map[local.cloud]].cidr
-      )
+      local.mgmt_subnet_map[local.cloud]
       :
       null
     )
@@ -324,11 +333,7 @@ locals {
       (local.single_az_mode ?
         local.mgmt_subnet_1
         :
-        (local.cloud == "gcp" ?
-          local.gcp_mgmt_subnet
-          :
-          local.vpc.public_subnets[local.mgmt_ha_subnet_map[local.cloud]].cidr
-        )
+        local.mgmt_ha_subnet_map[local.cloud]
       )
       :
       null
@@ -336,15 +341,17 @@ locals {
   )
 
   mgmt_subnet_map = {
-    azure = 2,
-    aws   = 0,
-    oci   = 3,
+    azure = local.cloud == "azure" ? local.vpc.public_subnets[2].cidr : null,
+    aws   = local.cloud == "aws" ? local.vpc.public_subnets[0].cidr : null,
+    oci   = local.cloud == "oci" ? local.vpc.public_subnets[3].cidr : null,
+    gcp   = local.gcp_mgmt_subnet
   }
 
   mgmt_ha_subnet_map = {
-    azure = 3,
-    aws   = 2,
-    oci   = 1,
+    azure = local.cloud == "azure" ? local.vpc.public_subnets[3].cidr : null,
+    aws   = local.cloud == "aws" ? local.vpc.public_subnets[2].cidr : null,
+    oci   = local.cloud == "oci" ? local.vpc.public_subnets[1].cidr : null,
+    gcp   = local.gcp_mgmt_subnet
   }
 
   #Determine firewall image version if not Aviatrix FQDN egress GW
@@ -362,7 +369,7 @@ locals {
   }
 
   #Determine firewall username and password
-  username = var.username == null ? lookup(local.username_map, local.cloud, null) : var.username
+  username = try(coalesce(var.username, lookup(local.username_map, local.cloud)), null)
   username_map = {
     azure = local.is_checkpoint ? "admin" : "fwadmin",
   }
@@ -373,4 +380,26 @@ locals {
   fw_amount_per_instance = var.fw_amount / 2
   fw_amount_instance_1   = local.ha_gw ? local.fw_amount_per_instance : 1
   fw_amount_instance_2   = local.ha_gw ? local.fw_amount_per_instance : 0
+
+  #FQDN Settings for Azure and GCP
+  cidr          = local.cloud == "gcp" ? "10.0.0.0/23" : local.vpc.cidr #Use dummy value for GCP
+  cidrbits      = tonumber(split("/", local.cidr)[1])
+  newbits       = 28 - local.cidrbits
+  netnum        = pow(2, local.newbits)
+  lan_subnet    = cidrsubnet(local.cidr, local.newbits, 4)
+  ha_lan_subnet = cidrsubnet(local.cidr, local.newbits, 8)
+
+  fqdn_lan_vpc_id  = local.cloud == "gcp" ? local.lan_vpc.vpc_id : null
+  fqdn_lan_cidr    = lookup(local.fqdn_lan_cidr_map, local.cloud, null)
+  ha_fqdn_lan_cidr = lookup(local.ha_fqdn_lan_cidr_map, local.cloud, null)
+
+  fqdn_lan_cidr_map = {
+    azure = local.lan_subnet
+    gcp   = local.cloud == "gcp" ? local.lan_vpc.subnets[0].cidr : null
+  }
+
+  ha_fqdn_lan_cidr_map = {
+    azure = local.ha_lan_subnet
+    gcp   = local.cloud == "gcp" ? local.lan_vpc.subnets[0].cidr : null
+  }
 }

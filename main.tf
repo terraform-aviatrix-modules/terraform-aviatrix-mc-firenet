@@ -5,7 +5,7 @@ resource "aviatrix_vpc" "management_vpc" {
   count                = local.cloud == "gcp" && local.is_palo ? 1 : 0 #Only create for Palo Alto deployments in GCP
   cloud_type           = 4
   account_name         = local.account
-  name                 = "${local.name}-mgmt"
+  name                 = "${substr(local.name, 0, 25)}-mgmt"
   aviatrix_transit_vpc = false
   aviatrix_firenet_vpc = false
 
@@ -21,7 +21,7 @@ resource "aviatrix_vpc" "egress_vpc" {
   count                = local.cloud == "gcp" ? 1 : 0 #Only create for GCP and when firenet is enabled
   cloud_type           = 4
   account_name         = local.account
-  name                 = "${local.name}-egress"
+  name                 = "${substr(local.name, 0, 23)}-egress"
   aviatrix_transit_vpc = false
   aviatrix_firenet_vpc = false
   subnets {
@@ -110,14 +110,16 @@ resource "aviatrix_gateway" "egress_instance_1" {
   cloud_type          = local.transit_gateway.cloud_type
   account_name        = local.account
   gw_name             = try(var.custom_fw_names[count.index], "${local.name}-az1-egress-gw${count.index + 1}")
-  vpc_id              = local.vpc.vpc_id
-  vpc_reg             = local.region
+  vpc_id              = local.cloud == "gcp" ? aviatrix_vpc.egress_vpc[0].vpc_id : local.vpc.vpc_id
+  vpc_reg             = local.cloud == "gcp" ? local.zone : local.region
   gw_size             = local.instance_size
   subnet              = local.egress_subnet_1
   single_az_ha        = local.single_az_ha
   tags                = var.tags
   availability_domain = local.availability_domain
   fault_domain        = local.fault_domain
+  fqdn_lan_vpc_id     = local.fqdn_lan_vpc_id
+  fqdn_lan_cidr       = local.fqdn_lan_cidr
 }
 
 resource "aviatrix_gateway" "egress_instance_2" {
@@ -125,14 +127,16 @@ resource "aviatrix_gateway" "egress_instance_2" {
   cloud_type          = local.transit_gateway.cloud_type
   account_name        = local.account
   gw_name             = try(var.custom_fw_names[length(var.custom_fw_names) / 2 + count.index], "${local.name}-az2-egress-gw${count.index + 1}")
-  vpc_id              = local.vpc.vpc_id
-  vpc_reg             = local.region
+  vpc_id              = local.cloud == "gcp" ? aviatrix_vpc.egress_vpc[0].vpc_id : local.vpc.vpc_id
+  vpc_reg             = local.cloud == "gcp" ? local.ha_zone : local.region
   gw_size             = local.instance_size
   subnet              = local.egress_subnet_2
   single_az_ha        = local.single_az_ha
   tags                = var.tags
   availability_domain = local.ha_availability_domain
   fault_domain        = local.ha_fault_domain
+  fqdn_lan_vpc_id     = local.fqdn_lan_vpc_id
+  fqdn_lan_cidr       = local.ha_fqdn_lan_cidr
 }
 
 #Firenet
@@ -155,12 +159,20 @@ resource "aviatrix_firenet" "firenet" {
 }
 
 resource "aviatrix_firewall_instance_association" "firenet_instance1" {
-  count                = var.associated ? local.fw_amount_instance_1 : 0
-  vpc_id               = local.vpc.vpc_id
-  firenet_gw_name      = local.transit_gateway.gw_name
-  instance_id          = local.is_aviatrix ? aviatrix_gateway.egress_instance_1[count.index].gw_name : aviatrix_firewall_instance.firewall_instance_1[count.index].instance_id
-  firewall_name        = local.is_aviatrix || local.cloud == "gcp" ? null : aviatrix_firewall_instance.firewall_instance_1[count.index].firewall_name
-  lan_interface        = local.is_aviatrix ? null : aviatrix_firewall_instance.firewall_instance_1[count.index].lan_interface
+  count           = var.associated ? local.fw_amount_instance_1 : 0
+  vpc_id          = local.vpc.vpc_id
+  firenet_gw_name = local.transit_gateway.gw_name
+  instance_id     = local.is_aviatrix ? aviatrix_gateway.egress_instance_1[count.index].gw_name : aviatrix_firewall_instance.firewall_instance_1[count.index].instance_id
+  firewall_name   = local.is_aviatrix || local.cloud == "gcp" ? null : aviatrix_firewall_instance.firewall_instance_1[count.index].firewall_name
+  lan_interface = (local.is_aviatrix ?
+    (local.cloud == "azure" ?
+      aviatrix_gateway.egress_instance_1[count.index].fqdn_lan_interface
+      :
+      null
+    )
+    :
+    aviatrix_firewall_instance.firewall_instance_1[count.index].lan_interface
+  )
   management_interface = local.is_aviatrix ? null : aviatrix_firewall_instance.firewall_instance_1[count.index].management_interface
   egress_interface     = local.is_aviatrix ? null : aviatrix_firewall_instance.firewall_instance_1[count.index].egress_interface
   vendor_type          = local.is_aviatrix ? "fqdn_gateway" : null
@@ -168,12 +180,20 @@ resource "aviatrix_firewall_instance_association" "firenet_instance1" {
 }
 
 resource "aviatrix_firewall_instance_association" "firenet_instance2" {
-  count                = var.associated ? local.fw_amount_instance_2 : 0
-  vpc_id               = local.vpc.vpc_id
-  firenet_gw_name      = local.transit_gateway.ha_gw_name
-  instance_id          = local.is_aviatrix ? aviatrix_gateway.egress_instance_2[count.index].gw_name : aviatrix_firewall_instance.firewall_instance_2[count.index].instance_id
-  firewall_name        = local.is_aviatrix || local.cloud == "gcp" ? null : aviatrix_firewall_instance.firewall_instance_2[count.index].firewall_name
-  lan_interface        = local.is_aviatrix ? null : aviatrix_firewall_instance.firewall_instance_2[count.index].lan_interface
+  count           = var.associated ? local.fw_amount_instance_2 : 0
+  vpc_id          = local.vpc.vpc_id
+  firenet_gw_name = local.transit_gateway.ha_gw_name
+  instance_id     = local.is_aviatrix ? aviatrix_gateway.egress_instance_2[count.index].gw_name : aviatrix_firewall_instance.firewall_instance_2[count.index].instance_id
+  firewall_name   = local.is_aviatrix || local.cloud == "gcp" ? null : aviatrix_firewall_instance.firewall_instance_2[count.index].firewall_name
+  lan_interface = (local.is_aviatrix ?
+    (local.cloud == "azure" ?
+      aviatrix_gateway.egress_instance_2[count.index].fqdn_lan_interface
+      :
+      null
+    )
+    :
+    aviatrix_firewall_instance.firewall_instance_2[count.index].lan_interface
+  )
   management_interface = local.is_aviatrix ? null : aviatrix_firewall_instance.firewall_instance_2[count.index].management_interface
   egress_interface     = local.is_aviatrix ? null : aviatrix_firewall_instance.firewall_instance_2[count.index].egress_interface
   vendor_type          = local.is_aviatrix ? "fqdn_gateway" : null
