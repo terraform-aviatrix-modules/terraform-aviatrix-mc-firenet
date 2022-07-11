@@ -88,13 +88,6 @@ variable "egress_enabled" {
   nullable    = false
 }
 
-variable "use_gwlb" {
-  description = "Use AWS GWLB for NGFW integration"
-  type        = bool
-  default     = false
-  nullable    = false
-}
-
 variable "tags" {
   description = "Map of tags to assign to the firewall instances."
   type        = map(string)
@@ -259,6 +252,7 @@ locals {
   lan_vpc                       = var.transit_module.mc_firenet_details.lan_vpc
   enable_transit_firenet        = var.transit_module.transit_gateway.enable_transit_firenet
   enable_egress_transit_firenet = var.transit_module.transit_gateway.enable_egress_transit_firenet
+  use_gwlb                      = var.transit_module.transit_gateway.enable_gateway_load_balancer != null ? var.transit_module.transit_gateway.enable_gateway_load_balancer : false
 
   is_checkpoint            = length(regexall("check point", lower(var.firewall_image))) > 0                                         #Check if fw image is Checkpoint. Needs special handling for username in Azure
   is_palo                  = length(regexall("palo", lower(var.firewall_image))) > 0                                                #Check if fw image is palo. Needs special handling for management_subnet (CP & Fortigate null)

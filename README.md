@@ -6,7 +6,7 @@ Aviatrix Terraform module for firenet deployment in multiple clouds, to be used 
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version | [mc-transit module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit) version
 :--- | :--- | :--- | :--- | :---
-v1.1.1 | >=1.1.0 | ~> 6.7.1186 | ~> 2.22.0 | ~> v2.1.0
+v1.1.2 | >=1.1.0 | ~> 6.7.1186 | ~> 2.22.0 | ~> v2.1.0
 
 Check [release notes](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/master/RELEASE_NOTES.md) for more details.
 Check [Compatibility list](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/master/COMPATIBILITY.md) for older versions.

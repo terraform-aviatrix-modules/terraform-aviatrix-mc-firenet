@@ -1,5 +1,8 @@
 # terraform-aviatrix-mc-firenet release notes
 
+## v1.1.2
+- GWLB usage is automatically detected from the transit module. As a result variable `use_gwlb` has been removed and needs to be removed from your module arguments when upgrading to this version.
+
 ## v1.1.1
 - Add support for deploying Aviatrix FQDN egress filtering gateways in Azure and GCP.
     - Known issue: Azure firenet subnets are not created deterministically, causing potential issue with deploying FQDN gateway in the wrong subnet.
