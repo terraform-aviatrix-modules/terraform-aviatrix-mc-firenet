@@ -1,6 +1,6 @@
 module "transit_non_ha_azure" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "v2.1.6"
+  version = "v2.1.5"
 
   cloud                  = "azure"
   name                   = "transit-azure-non-ha"

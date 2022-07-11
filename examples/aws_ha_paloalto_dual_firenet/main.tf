@@ -1,7 +1,7 @@
 #East West transit Firenet
 module "transit_ha_dual_firenet_aws_east_west" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "v2.1.6"
+  version = "v2.1.5"
 
   cloud                  = "aws"
   name                   = "transit-ha-aws-east-west"
@@ -22,7 +22,7 @@ module "mc_firenet_ha_dual_firenet_aws_east_west" {
 #Egress transit Firenet
 module "transit_ha_dual_firenet_aws_egress" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "v2.1.6"
+  version = "v2.1.5"
 
   cloud                         = "aws"
   name                          = "transit-ha-aws-egress"
