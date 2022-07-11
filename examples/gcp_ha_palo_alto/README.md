@@ -4,7 +4,7 @@ On top of that, Firenet is deployed with the mc-firenet module, deploying a pair
 ```
 module "transit_ha_gcp" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.1.3"
+  version = "2.1.5"
 
   cloud                  = "gcp"
   name                   = "transit-ha-gcp"
@@ -17,7 +17,7 @@ module "transit_ha_gcp" {
 
 module "mc_firenet_ha_gcp" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "1.1.1"
+  version = "1.1.2"
 
   transit_module = module.transit_ha_gcp
   firewall_image = "Palo Alto Networks VM-Series Next-Generation Firewall BUNDLE1"
