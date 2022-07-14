@@ -1,7 +1,7 @@
 In this example, the module deploys 2 transit VPC's and HA pairs of Aviatrix transit gateways in AWS (mc-transit module). One for east-west traffic and one for egress traffic.
 On top of that, Firenet is deployed with the mc-firenet module, deploying 2 Palo Alto firewalls in each transit, one pair filtering east west traffic, the other egress traffic.
 
-```
+```hcl
 #East West transit Firenet
 module "transit_ha_dual_firenet_aws_east_west" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"

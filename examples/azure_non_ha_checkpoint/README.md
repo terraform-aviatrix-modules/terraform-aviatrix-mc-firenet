@@ -1,7 +1,7 @@
 In this example, the module deploys the transit VNET and a single Aviatrix transit gateway in Azure (mc-transit module).
 On top of that, Firenet is deployed with the mc-firenet module, deploying a single Checkpoint firewall and enabling egress traffic to the internet.
 
-```
+```hcl
 module "transit_non_ha_azure" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
   version = "v2.1.5"

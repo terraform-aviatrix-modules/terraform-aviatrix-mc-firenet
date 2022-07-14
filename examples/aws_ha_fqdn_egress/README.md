@@ -1,7 +1,7 @@
 In this example, the module deploys the transit VPC and a HA pair of Aviatrix transit gateways in AWS (mc-transit module).
 On top of that, Firenet is deployed with the mc-firenet module, deploying 4 Aviatrix FQDN egress gateways for filtering traffic to the internet.
 
-```
+```hcl
 module "mc_transit_ha_aws_fqdn" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
   version = "2.1.5"

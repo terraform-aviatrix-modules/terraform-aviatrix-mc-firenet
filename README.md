@@ -12,7 +12,7 @@ Check [release notes](https://github.com/terraform-aviatrix-modules/terraform-av
 Check [Compatibility list](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/master/COMPATIBILITY.md) for older versions.
 
 ### Usage Example
-```
+```hcl
 module "mc_transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
   version = "v2.1.5"

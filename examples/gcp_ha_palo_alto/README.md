@@ -1,7 +1,7 @@
 In this example, the module deploys the transit VPC and a HA pair of Aviatrix transit gateways in GCP (mc-transit module).
 On top of that, Firenet is deployed with the mc-firenet module, deploying a pair of Palo Alto firewalls and enabling egress traffic to the internet.
 
-```
+```hcl
 module "transit_ha_gcp" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
   version = "2.1.5"
