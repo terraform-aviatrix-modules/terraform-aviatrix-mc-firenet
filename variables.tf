@@ -229,6 +229,12 @@ variable "associated" {
   nullable    = false
 }
 
+variable "key_name" {
+  description = "Applicable to AWS deployment only. AWS Key Pair name. If not provided a Key Pair will be generated."
+  type        = string
+  default     = null
+}
+
 locals {
   #Gather transit module details in locals, for easy reference
   transit_gateway               = var.transit_module.transit_gateway

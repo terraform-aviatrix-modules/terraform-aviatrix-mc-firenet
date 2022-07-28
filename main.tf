@@ -47,6 +47,7 @@ resource "aviatrix_firewall_instance" "firewall_instance_1" {
   tags                   = var.tags
   username               = local.username
   password               = local.password
+  key_name               = var.key_name
   availability_domain    = local.availability_domain
   fault_domain           = local.fault_domain
   management_vpc_id      = local.is_palo && local.cloud == "gcp" ? aviatrix_vpc.management_vpc[0].vpc_id : null
@@ -83,6 +84,7 @@ resource "aviatrix_firewall_instance" "firewall_instance_2" {
   tags                   = var.tags
   username               = local.username
   password               = local.password
+  key_name               = var.key_name
   availability_domain    = local.ha_availability_domain
   fault_domain           = local.ha_fault_domain
   management_vpc_id      = local.is_palo && local.cloud == "gcp" ? aviatrix_vpc.management_vpc[0].vpc_id : null
