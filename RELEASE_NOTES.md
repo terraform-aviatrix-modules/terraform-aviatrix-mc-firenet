@@ -1,6 +1,7 @@
 # terraform-aviatrix-mc-firenet release notes
 
 ## v1.2.0
+- Made module compatible with controller version 6.8 and provider version 2.23.x.
 - Remove option to configure fail close. Provider [no longer supports this](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/guides/release-notes#enhancements) and will automatically default to true.
 
 ## v1.1.2
@@ -12,7 +13,7 @@
 - Automatically truncate VPC name to 30 characters
 
 ## v1.1.0
-- Made module compatioble with controller version 6.7 and provider version 2.22.x.
+- Made module compatible with controller version 6.7 and provider version 2.22.x.
 - Made firewall instance association conditional with new boolean argument `associated`.
 - Resolved a bug where FQDN egress gateways could not be deployed in other clouds than AWS.
 
