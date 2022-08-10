@@ -11,7 +11,7 @@ terraform {
 
 module "transit_non_ha_oci" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.1.3"
+  version = "2.2.0"
 
   cloud                  = "oci"
   name                   = "transit-non-ha-oci"
@@ -40,7 +40,7 @@ variable "custom_fw_names" {
 
 module "transit_ha_oci" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.1.3"
+  version = "2.2.0"
 
   cloud                  = "oci"
   name                   = "transit-ha-oci"
