@@ -114,12 +114,6 @@ variable "firewall_image_id" {
   default     = null
 }
 
-variable "fail_close_enabled" {
-  description = "Set to true to enable fail_close"
-  type        = bool
-  default     = null
-}
-
 variable "user_data_1" {
   description = "User data for bootstrapping Fortigate and Checkpoint firewalls"
   type        = string

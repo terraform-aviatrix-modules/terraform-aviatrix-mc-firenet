@@ -1,5 +1,8 @@
 # terraform-aviatrix-mc-firenet release notes
 
+## v1.2.0
+- Remove option to configure fail close. Provider [no longer supports this](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/guides/release-notes#enhancements) and will automatically default to true.
+
 ## v1.1.2
 - GWLB usage is automatically detected from the transit module. As a result variable `use_gwlb` has been removed and needs to be removed from your module arguments when upgrading to this version.
 

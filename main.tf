@@ -149,7 +149,6 @@ resource "aviatrix_firenet" "firenet" {
   keep_alive_via_lan_interface_enabled = var.keep_alive_via_lan_interface_enabled
   manage_firewall_instance_association = false
   egress_static_cidrs                  = var.egress_static_cidrs
-  fail_close_enabled                   = var.fail_close_enabled
   east_west_inspection_excluded_cidrs  = var.east_west_inspection_excluded_cidrs
 
   depends_on = [
