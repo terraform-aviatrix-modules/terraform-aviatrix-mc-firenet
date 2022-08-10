@@ -26,7 +26,7 @@ module "mc_transit" {
 
 module "firenet_1" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "v1.1.2"
+  version = "v1.2.0"
 
   transit_module = module.mc_transit
   firewall_image = "Palo Alto Networks VM-Series Next-Generation Firewall Bundle 1"
