@@ -152,7 +152,7 @@ variable "password" {
   default     = "Aviatrix#1234"
 }
 
-variable "password" {
+variable "ssh_public_key" {
   description = "Firewall instance SSH public key"
   type        = string
   default     = null
