@@ -153,6 +153,12 @@ variable "password" {
   nullable    = false
 }
 
+variable "sic_key" {
+  description = "SIC key for Checkpoint firewalls"
+  type        = string
+  default     = null
+}
+
 variable "bootstrap_storage_name_1" {
   description = "The firewall bootstrap_storage_name"
   type        = string
