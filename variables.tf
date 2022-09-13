@@ -380,6 +380,7 @@ locals {
   }
 
   password = local.cloud == "azure" ? var.password : null
+  ssh_public_key = local.cloud == "azure" ? var.ssh_public_key : null
 
   #Determine FW Amount
   fw_amount_per_instance = var.fw_amount / 2
