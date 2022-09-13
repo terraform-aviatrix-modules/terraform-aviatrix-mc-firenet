@@ -150,7 +150,12 @@ variable "password" {
   description = "Firewall instance password"
   type        = string
   default     = "Aviatrix#1234"
-  nullable    = false
+}
+
+variable "ssh_public_key" {
+  description = "Firewall instance SSH public key"
+  type        = string
+  default     = null
 }
 
 variable "sic_key" {
@@ -374,7 +379,8 @@ locals {
     azure = local.is_checkpoint ? "admin" : "fwadmin",
   }
 
-  password = local.cloud == "azure" ? var.password : null
+  password       = local.cloud == "azure" ? var.password : null
+  ssh_public_key = local.cloud == "azure" ? var.ssh_public_key : null
 
   #Determine FW Amount
   fw_amount_per_instance = var.fw_amount / 2
