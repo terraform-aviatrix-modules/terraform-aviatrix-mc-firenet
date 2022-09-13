@@ -47,6 +47,7 @@ resource "aviatrix_firewall_instance" "firewall_instance_1" {
   tags                   = var.tags
   username               = local.username
   password               = local.password
+  ssh_public_key         = local.ssh_public_key
   sic_key                = var.sic_key
   key_name               = var.key_name
   availability_domain    = local.availability_domain
@@ -85,6 +86,7 @@ resource "aviatrix_firewall_instance" "firewall_instance_2" {
   tags                   = var.tags
   username               = local.username
   password               = local.password
+  ssh_public_key         = local.ssh_public_key
   sic_key                = var.sic_key
   key_name               = var.key_name
   availability_domain    = local.ha_availability_domain
