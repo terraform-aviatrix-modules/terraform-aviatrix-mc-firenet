@@ -150,7 +150,12 @@ variable "password" {
   description = "Firewall instance password"
   type        = string
   default     = "Aviatrix#1234"
-  nullable    = false
+}
+
+variable "password" {
+  description = "Firewall instance SSH public key"
+  type        = string
+  default     = null
 }
 
 variable "sic_key" {
