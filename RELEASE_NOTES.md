@@ -2,6 +2,7 @@
 
 ## v1.3.0
 - 6.9 / 2.24.x compatibility
+- Add support for ssh_public_key and sic_key arguments
 
 ## v1.2.0
 - Made module compatible with controller version 6.8 and provider version 2.23.x.
