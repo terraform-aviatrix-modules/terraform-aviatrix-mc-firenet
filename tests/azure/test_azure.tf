@@ -11,7 +11,7 @@ terraform {
 
 module "transit_non_ha_azure" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.2.0"
+  version = "2.3.0"
 
   cloud                  = "azure"
   name                   = "transit-non-ha-azure"
@@ -42,7 +42,7 @@ variable "custom_fw_names" {
 
 module "transit_ha_azure" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.2.0"
+  version = "2.3.0"
 
   cloud                  = "azure"
   name                   = "transit-ha-azure"

@@ -1,5 +1,8 @@
 # terraform-aviatrix-mc-firenet release notes
 
+## v1.3.0
+- 6.9 / 2.24.x compatibility
+
 ## v1.2.0
 - Made module compatible with controller version 6.8 and provider version 2.23.x.
 - Remove option to configure fail close. Provider [no longer supports this](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/guides/release-notes#enhancements) and will automatically default to true.

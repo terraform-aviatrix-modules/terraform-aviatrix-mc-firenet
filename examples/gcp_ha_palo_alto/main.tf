@@ -1,6 +1,6 @@
 module "transit_ha_gcp" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.2.0"
+  version = "2.3.0"
 
   cloud                  = "gcp"
   name                   = "transit-ha-gcp"
@@ -8,12 +8,12 @@ module "transit_ha_gcp" {
   cidr                   = "10.2.0.0/23"
   account                = "GCP"
   enable_transit_firenet = true
-  lan_cidr               = "10.102.0.0/24"
+  lan_cidr               = "10.1.3.0.0/24"
 }
 
 module "mc_firenet_ha_gcp" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "1.2.0"
+  version = "1.3.0"
 
   transit_module = module.transit_ha_gcp
   firewall_image = "Palo Alto Networks VM-Series Next-Generation Firewall BUNDLE1"
