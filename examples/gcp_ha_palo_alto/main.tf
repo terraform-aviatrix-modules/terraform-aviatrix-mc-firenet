@@ -8,7 +8,7 @@ module "transit_ha_gcp" {
   cidr                   = "10.2.0.0/23"
   account                = "GCP"
   enable_transit_firenet = true
-  lan_cidr               = "10.1.3.0.0/24"
+  lan_cidr               = "10.102.0.0/24"
 }
 
 module "mc_firenet_ha_gcp" {
