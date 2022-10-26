@@ -387,13 +387,31 @@ locals {
   fw_amount_instance_1   = local.ha_gw ? local.fw_amount_per_instance : 1
   fw_amount_instance_2   = local.ha_gw ? local.fw_amount_per_instance : 0
 
+  azure_lan_subnet = (
+    local.cloud == "azure" ?
+     try(element([
+      for subnet in var.transit_module.transit_gateway.vpc.private_subnets
+      : subnet.cidr if endswith(subnet.name, "tgw-dmz-firewall-lan")
+      ], 0), null)  
+      : null
+    )
+    
+  azure_halan_subnet = (
+    local.cloud == "azure" ?
+     try(element([
+      for subnet in var.transit_module.transit_gateway.vpc.private_subnets
+      : subnet.cidr if endswith(subnet.name, "hagw-dmz-firewall-lan")
+      ], 0), null)
+      : null
+    ) 
+
   #FQDN Settings for Azure and GCP
   cidr          = local.cloud == "gcp" ? "10.0.0.0/23" : local.vpc.cidr #Use dummy value for GCP
   cidrbits      = tonumber(split("/", local.cidr)[1])
   newbits       = 28 - local.cidrbits
   netnum        = pow(2, local.newbits)
-  lan_subnet    = cidrsubnet(local.cidr, local.newbits, 4)
-  ha_lan_subnet = cidrsubnet(local.cidr, local.newbits, 8)
+  lan_subnet    = local.azure_lan_subnet != null ? local.azure_lan_subnet : cidrsubnet(local.cidr, local.newbits, 4)
+  ha_lan_subnet = local.azure_lan_subnet != null ? local.azure_lan_subnet : cidrsubnet(local.cidr, local.newbits, 4)
 
   fqdn_lan_vpc_id  = local.cloud == "gcp" ? local.lan_vpc.vpc_id : null
   fqdn_lan_cidr    = lookup(local.fqdn_lan_cidr_map, local.cloud, null)
