@@ -240,6 +240,18 @@ variable "key_name" {
   default     = null
 }
 
+variable "lan_subnet" {
+  description = "Applicable to Azure deployment only. Be explicit about which subnet to deploy FQDN gateways."
+  type        = string
+  default     = null
+}
+
+variable "ha_lan_subnet" {
+  description = "Applicable to Azure deployment only. Be explicit about which subnet to deploy ha FQDN gateways."
+  type        = string
+  default     = null
+}
+
 locals {
   #Gather transit module details in locals, for easy reference
   transit_gateway               = var.transit_module.transit_gateway
@@ -392,8 +404,8 @@ locals {
   cidrbits      = tonumber(split("/", local.cidr)[1])
   newbits       = 28 - local.cidrbits
   netnum        = pow(2, local.newbits)
-  lan_subnet    = cidrsubnet(local.cidr, local.newbits, 4)
-  ha_lan_subnet = cidrsubnet(local.cidr, local.newbits, 8)
+  lan_subnet    = try(coalesce(var.lan_subnet), cidrsubnet(local.cidr, local.newbits, 4))
+  ha_lan_subnet = try(coalesce(var.ha_lan_subnet), cidrsubnet(local.cidr, local.newbits, 8))
 
   fqdn_lan_vpc_id  = local.cloud == "gcp" ? local.lan_vpc.vpc_id : null
   fqdn_lan_cidr    = lookup(local.fqdn_lan_cidr_map, local.cloud, null)
