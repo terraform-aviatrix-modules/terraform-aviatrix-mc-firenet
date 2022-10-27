@@ -404,8 +404,8 @@ locals {
   cidrbits      = tonumber(split("/", local.cidr)[1])
   newbits       = 28 - local.cidrbits
   netnum        = pow(2, local.newbits)
-  lan_subnet    = try(coalesce(var.lan_subnet), cidrsubnet(local.cidr, local.newbits, 4))
-  ha_lan_subnet = try(coalesce(var.ha_lan_subnet), cidrsubnet(local.cidr, local.newbits, 8))
+  lan_subnet    = try(coalesce(var.lan_subnet, cidrsubnet(local.cidr, local.newbits, 4)))
+  ha_lan_subnet = try(coalesce(var.ha_lan_subnet, cidrsubnet(local.cidr, local.newbits, 8)))
 
   fqdn_lan_vpc_id  = local.cloud == "gcp" ? local.lan_vpc.vpc_id : null
   fqdn_lan_cidr    = lookup(local.fqdn_lan_cidr_map, local.cloud, null)
