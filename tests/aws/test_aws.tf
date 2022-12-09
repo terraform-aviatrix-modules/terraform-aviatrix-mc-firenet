@@ -11,7 +11,7 @@ terraform {
 
 module "transit_non_ha_aws" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.3.0"
+  version = "2.4.0"
 
   cloud                  = "aws"
   name                   = "transit-non-ha-aws"
@@ -32,7 +32,7 @@ module "mc_firenet_non_ha_aws" {
 
 module "transit_ha_aws" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.3.0"
+  version = "2.4.0"
 
   cloud                  = "aws"
   name                   = "transit-ha-aws"
@@ -64,7 +64,7 @@ module "mc_firenet_ha_aws" {
 
 module "transit_ha_aws_fqdn" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.3.0"
+  version = "2.4.0"
 
   cloud                  = "aws"
   name                   = "transit-ha-fqdn-aws"

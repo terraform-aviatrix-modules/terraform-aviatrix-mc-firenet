@@ -11,7 +11,7 @@ terraform {
 
 module "transit_non_ha_gcp" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.3.0"
+  version = "2.4.0"
 
   cloud                  = "gcp"
   name                   = "transit-non-ha-gcp"
@@ -44,7 +44,7 @@ variable "custom_fw_names" {
 
 module "transit_ha_gcp" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.3.0"
+  version = "2.4.0"
 
   cloud                  = "gcp"
   name                   = "transit-ha-gcp"
