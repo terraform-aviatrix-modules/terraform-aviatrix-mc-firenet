@@ -1,5 +1,8 @@
 # terraform-aviatrix-mc-firenet release notes
 
+## v1.4.0
+- 7.0 / 3.0.x compatibility
+
 ## v1.3.0
 - 6.9 / 2.24.x compatibility
 - Add support for ssh_public_key and sic_key arguments

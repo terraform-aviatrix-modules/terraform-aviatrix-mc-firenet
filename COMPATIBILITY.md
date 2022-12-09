@@ -1,6 +1,7 @@
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version | [mc-transit module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit) version
 :--- | :--- | :--- | :--- | :---
+v1.4.0 | >=1.1.0 | >= 7.0 | ~> 3.0.0 | ~> v2.4.0
 v1.3.0 | >=1.1.0 | >= 6.9 | ~> 2.24.0 | ~> v2.3.0
 v1.2.0 | >=1.1.0 | ~> 6.8.1148 | ~> 2.23.0 | ~> v2.2.0
 v1.1.2 | >=1.1.0 | ~> 6.7.1186 | ~> 2.22.0 | ~> v2.1.5
