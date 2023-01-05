@@ -360,7 +360,7 @@ locals {
   }
 
   #Determine firewall image version if not Aviatrix FQDN egress GW
-  get_default_firewall_image = (local.is_aviatrix || var.firewall_image_id != null) #Do not use default image data if module is used to deploy an Aviatrix FQDN gateway or image_id is provided.
+  get_default_firewall_image = !(local.is_aviatrix || var.firewall_image_id != null) #Do not use default image data if module is used to deploy an Aviatrix FQDN gateway or image_id is provided.
   firewall_image_data        = local.get_default_firewall_image ? [for i in data.aviatrix_firewall_instance_images.fw_images.firewall_images.* : i if i.firewall_image == var.firewall_image] : null
   latest_firewall_version    = local.get_default_firewall_image ? local.firewall_image_data[0].firewall_image_version[0] : null
   firewall_image_version     = local.get_default_firewall_image ? coalesce(var.firewall_image_version, local.latest_firewall_version) : null
