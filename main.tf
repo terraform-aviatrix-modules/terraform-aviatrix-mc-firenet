@@ -76,7 +76,7 @@ resource "aviatrix_firewall_instance" "firewall_instance_2" {
   firewall_name          = try(var.custom_fw_names[length(var.custom_fw_names) / 2 + count.index], "${local.name}-az2-fw${count.index + 1}")
   firewall_size          = local.instance_size
   vpc_id                 = local.vpc.vpc_id
-  firewall_image         = var.firewall_image
+  firewall_image         = var.firewall_image == "" ? null : var.firewall_image
   firewall_image_version = local.firewall_image_version
   egress_subnet          = local.egress_subnet_2
   firenet_gw_name        = local.transit_gateway.ha_gw_name
