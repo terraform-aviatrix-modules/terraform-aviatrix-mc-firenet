@@ -40,6 +40,7 @@ variable "attached" {
 variable "firewall_image" {
   description = "The firewall image to be used to deploy the NGFW's"
   type        = string
+  default     = null
 }
 
 variable "firewall_image_version" {
