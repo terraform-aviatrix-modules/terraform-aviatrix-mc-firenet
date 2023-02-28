@@ -1,7 +1,10 @@
 # terraform-aviatrix-mc-firenet release notes
 
-## v1.4.1
+## v1.4.2
 - Removed support for Azure image ID.
+
+## v1.4.1
+- Fix issue where password was nullable.
 
 ## v1.4.0
 - 7.0 / 3.0.x compatibility

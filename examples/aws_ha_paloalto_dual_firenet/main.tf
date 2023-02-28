@@ -13,7 +13,7 @@ module "transit_ha_dual_firenet_aws_east_west" {
 
 module "mc_firenet_ha_dual_firenet_aws_east_west" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "v1.4.1"
+  version = "v1.4.2"
 
   transit_module = module.transit_ha_dual_firenet_aws_east_west
   firewall_image = "Palo Alto Networks VM-Series Next-Generation Firewall Bundle 1"
@@ -34,7 +34,7 @@ module "transit_ha_dual_firenet_aws_egress" {
 
 module "mc_firenet_ha_dual_firenet_aws_egress" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "v1.4.1"
+  version = "v1.4.2"
 
   transit_module = module.transit_ha_dual_firenet_aws_egress
   firewall_image = "Palo Alto Networks VM-Series Next-Generation Firewall Bundle 1"
