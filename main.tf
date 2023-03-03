@@ -126,6 +126,11 @@ resource "aviatrix_gateway" "egress_instance_1" {
   fault_domain        = local.fault_domain
   fqdn_lan_vpc_id     = local.fqdn_lan_vpc_id
   fqdn_lan_cidr       = local.fqdn_lan_cidr
+  lifecycle {
+    ignore_changes = [
+      enable_vpc_dns_server # aviatrix_fqdn gw_filter_tag_list modifies this value on the gateway
+    ]
+  }
 }
 
 resource "aviatrix_gateway" "egress_instance_2" {
@@ -143,6 +148,11 @@ resource "aviatrix_gateway" "egress_instance_2" {
   fault_domain        = local.ha_fault_domain
   fqdn_lan_vpc_id     = local.fqdn_lan_vpc_id
   fqdn_lan_cidr       = local.ha_fqdn_lan_cidr
+  lifecycle {
+    ignore_changes = [
+      enable_vpc_dns_server # aviatrix_fqdn gw_filter_tag_list modifies this value on the gateway
+    ]
+  }
 }
 
 #Firenet
