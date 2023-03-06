@@ -1,5 +1,8 @@
 # terraform-aviatrix-mc-firenet release notes
 
+## v1.4.3
+- Add ignore lifecycle statement to VPC DNS setting for FQDN egress.
+
 ## v1.4.2
 - Removed support for Azure image ID.
 
