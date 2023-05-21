@@ -4,7 +4,7 @@ On top of that, Firenet is deployed with the mc-firenet module, deploying 4 Avia
 ```hcl
 module "mc_transit_ha_aws_fqdn" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.4.0"
+  version = "2.5.0"
 
   cloud                  = "aws"
   name                   = "transit-ha-fqdn-aws"
@@ -16,7 +16,7 @@ module "mc_transit_ha_aws_fqdn" {
 
 module "mc_firenet_ha_aws_fqdn" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "1.4.3"
+  version = "1.5.0"
 
   transit_module  = module.mc_transit_ha_aws_fqdn
   firewall_image  = "aviatrix"

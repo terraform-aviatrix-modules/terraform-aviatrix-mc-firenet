@@ -1,5 +1,8 @@
 # terraform-aviatrix-mc-firenet release notes
 
+## v1.5.0
+- Compatibility with controller version 7.1 and Terraform provider version 3.1.x
+
 ## v1.4.3
 - Add ignore lifecycle statement to VPC DNS setting for FQDN egress.
 
