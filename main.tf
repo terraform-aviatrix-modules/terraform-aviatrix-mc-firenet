@@ -163,6 +163,7 @@ resource "aviatrix_firenet" "firenet" {
   keep_alive_via_lan_interface_enabled = local.use_gwlb ? null : true
   egress_static_cidrs                  = var.egress_static_cidrs
   east_west_inspection_excluded_cidrs  = var.east_west_inspection_excluded_cidrs
+  hashing_algorithm                    = var.hashing_algorithm
 
   depends_on = [
     aviatrix_firewall_instance_association.firenet_instance1,
