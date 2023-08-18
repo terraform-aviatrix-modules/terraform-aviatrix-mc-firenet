@@ -30,6 +30,12 @@ variable "fw_amount" {
   }
 }
 
+variable "hashing_algorithm" {
+  description = "Hashing algorithm to load balance traffic across the firewall. Valid values: 2-Tuple, 5-Tuple. Default value: 5-Tuple"
+  type        = string
+  default     = null
+}
+
 variable "attached" {
   description = "Boolean to determine if the spawned firewall instances will be attached on creation"
   type        = bool
