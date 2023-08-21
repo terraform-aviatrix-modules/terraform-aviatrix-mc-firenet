@@ -1,8 +1,12 @@
 # terraform-aviatrix-mc-firenet release notes
 
-## v1.5.1
+## v1.5.2
 - Add support for configuring hashing algorithm
 - Changed subnet number for Azure central FQDN deployment
+
+## <del>v1.5.1</del> - Withdrawn due to unplanned keepalive behavior
+- <del>Add support for configuring hashing algorithm</del>
+- <del>Changed subnet number for Azure central FQDN deployment</del>
 
 ## v1.5.0
 - Compatibility with controller version 7.1 and Terraform provider version 3.1.x
