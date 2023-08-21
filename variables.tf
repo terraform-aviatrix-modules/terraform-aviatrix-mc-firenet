@@ -110,7 +110,8 @@ variable "egress_static_cidrs" {
 variable "keep_alive_via_lan_interface_enabled" {
   description = "Enable Keep Alive via Firewall LAN Interface"
   type        = bool
-  default     = null
+  default     = false
+  nullable    = false
 }
 
 variable "firewall_image_id" {
