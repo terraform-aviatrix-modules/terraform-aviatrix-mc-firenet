@@ -16,7 +16,7 @@ module "transit_ha_aws" {
 
 module "mc_firenet_ha_aws" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "v1.5.1"
+  version = "v1.5.2"
 
   transit_module = module.transit_ha_aws
   firewall_image = "Fortinet FortiGate Next-Generation Firewall"
