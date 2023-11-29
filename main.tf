@@ -67,6 +67,7 @@ resource "aviatrix_firewall_instance" "firewall_instance_1" {
     ignore_changes = [
       firewall_image_version, #Do not replace FW instance, when latest image version changes
       firewall_size,          #Do not replace FW instance, after out of band resizing of instance
+      tags,                   #Do not replace FW instance when changing tags
     ]
   }
 }
@@ -106,6 +107,7 @@ resource "aviatrix_firewall_instance" "firewall_instance_2" {
     ignore_changes = [
       firewall_image_version, #Do not replace FW instance, when latest image version changes
       firewall_size,          #Do not replace FW instance, after out of band resizing of instance
+      tags,                   #Do not replace FW instance when changing tags
     ]
   }
 }
