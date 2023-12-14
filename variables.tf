@@ -247,3 +247,26 @@ variable "key_name" {
   default     = null
 }
 
+variable "egress_subnet_1" {
+  description = "Subnet for firenet egress interface (odd instances). Only used when mc-transit was built with an existing VNET."
+  type        = string
+  default     = null
+}
+
+variable "egress_subnet_2" {
+  description = "Subnet for firenet egress interface (even instances). Only used when mc-transit was built with an existing VNET."
+  type        = string
+  default     = null
+}
+
+variable "mgmt_subnet_1" {
+  description = "Subnet for firenet management interface (odd instances). Only used when mc-transit was built with an existing VNET."
+  type        = string
+  default     = null
+}
+
+variable "mgmt_subnet_2" {
+  description = "Subnet for firenet management interface (even instances). Only used when mc-transit was built with an existing VNET."
+  type        = string
+  default     = null
+}

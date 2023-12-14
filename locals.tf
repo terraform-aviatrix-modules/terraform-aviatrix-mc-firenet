@@ -2,6 +2,7 @@ locals {
   #Gather transit module details in locals, for easy reference
   transit_gateway               = var.transit_module.transit_gateway
   vpc                           = var.transit_module.vpc
+  vpc_id                        = var.transit_module.mc_firenet_details.vpc_id
   account                       = var.transit_module.transit_gateway.account_name
   region                        = var.transit_module.mc_firenet_details.region
   ha_region                     = var.transit_module.mc_firenet_details.ha_region
@@ -19,6 +20,7 @@ locals {
   ha_availability_domain        = var.transit_module.mc_firenet_details.ha_availability_domain
   ha_fault_domain               = var.transit_module.mc_firenet_details.ha_fault_domain
   lan_vpc                       = var.transit_module.mc_firenet_details.lan_vpc
+  use_existing_vpc              = var.transit_module.mc_firenet_details.use_existing_vpc
   enable_transit_firenet        = var.transit_module.transit_gateway.enable_transit_firenet
   enable_egress_transit_firenet = var.transit_module.transit_gateway.enable_egress_transit_firenet
   use_gwlb                      = var.transit_module.transit_gateway.enable_gateway_load_balancer != null ? var.transit_module.transit_gateway.enable_gateway_load_balancer : false
@@ -49,26 +51,28 @@ locals {
     null
   )
 
-  egress_subnet_1 = local.egress_subnet_map[local.cloud]
+  egress_subnet_1 = (local.use_existing_vpc ? var.egress_subnet_1 : local.egress_subnet_map[local.cloud])
   egress_subnet_2 = (
-    (local.single_az_mode ?
-      local.egress_subnet_1
-      :
-      local.egress_ha_subnet_map[local.cloud]
+    (local.use_existing_vpc ? var.egress_subnet_1 :
+      (local.single_az_mode ?
+        local.egress_subnet_1
+        :
+        local.egress_ha_subnet_map[local.cloud]
+      )
     )
   )
 
   egress_subnet_map = {
-    azure = local.cloud == "azure" ? local.vpc.public_subnets[0].cidr : null,
-    aws   = local.cloud == "aws" ? local.vpc.public_subnets[1].cidr : null,
-    oci   = local.cloud == "oci" ? local.vpc.public_subnets[2].cidr : null,
+    azure = local.cloud == "azure" && !local.use_existing_vpc ? local.vpc.public_subnets[0].cidr : null,
+    aws   = local.cloud == "aws" && !local.use_existing_vpc ? local.vpc.public_subnets[1].cidr : null,
+    oci   = local.cloud == "oci" && !local.use_existing_vpc ? local.vpc.public_subnets[2].cidr : null,
     gcp   = local.gcp_egress_subnet,
   }
 
   egress_ha_subnet_map = {
-    azure = local.cloud == "azure" ? local.vpc.public_subnets[1].cidr : null,
-    aws   = local.cloud == "aws" ? local.vpc.public_subnets[3].cidr : null,
-    oci   = local.cloud == "oci" ? local.vpc.public_subnets[0].cidr : null,
+    azure = local.cloud == "azure" && !local.use_existing_vpc ? local.vpc.public_subnets[1].cidr : null,
+    aws   = local.cloud == "aws" && !local.use_existing_vpc ? local.vpc.public_subnets[3].cidr : null,
+    oci   = local.cloud == "oci" && !local.use_existing_vpc ? local.vpc.public_subnets[0].cidr : null,
     gcp   = local.gcp_egress_subnet,
   }
 
@@ -85,7 +89,7 @@ locals {
 
   mgmt_subnet_1 = (
     (local.is_palo ?
-      local.mgmt_subnet_map[local.cloud]
+      (local.use_existing_vpc ? var.mgmt_subnet_1 : local.mgmt_subnet_map[local.cloud])
       :
       null
     )
@@ -96,7 +100,11 @@ locals {
       (local.single_az_mode ?
         local.mgmt_subnet_1
         :
-        local.mgmt_ha_subnet_map[local.cloud]
+        (local.use_existing_vpc ?
+          var.mgmt_subnet_2
+          :
+          local.mgmt_ha_subnet_map[local.cloud]
+        )
       )
       :
       null
@@ -104,16 +112,16 @@ locals {
   )
 
   mgmt_subnet_map = {
-    azure = local.cloud == "azure" ? local.vpc.public_subnets[2].cidr : null,
-    aws   = local.cloud == "aws" ? local.vpc.public_subnets[0].cidr : null,
-    oci   = local.cloud == "oci" ? local.vpc.public_subnets[3].cidr : null,
+    azure = local.cloud == "azure" && !local.use_existing_vpc ? local.vpc.public_subnets[2].cidr : null,
+    aws   = local.cloud == "aws" && !local.use_existing_vpc ? local.vpc.public_subnets[0].cidr : null,
+    oci   = local.cloud == "oci" && !local.use_existing_vpc ? local.vpc.public_subnets[3].cidr : null,
     gcp   = local.gcp_mgmt_subnet
   }
 
   mgmt_ha_subnet_map = {
-    azure = local.cloud == "azure" ? local.vpc.public_subnets[3].cidr : null,
-    aws   = local.cloud == "aws" ? local.vpc.public_subnets[2].cidr : null,
-    oci   = local.cloud == "oci" ? local.vpc.public_subnets[1].cidr : null,
+    azure = local.cloud == "azure" && !local.use_existing_vpc ? local.vpc.public_subnets[3].cidr : null,
+    aws   = local.cloud == "aws" && !local.use_existing_vpc ? local.vpc.public_subnets[2].cidr : null,
+    oci   = local.cloud == "oci" && !local.use_existing_vpc ? local.vpc.public_subnets[1].cidr : null,
     gcp   = local.gcp_mgmt_subnet
   }
 
@@ -146,7 +154,7 @@ locals {
   fw_amount_instance_2   = local.ha_gw ? local.fw_amount_per_instance : 0
 
   #FQDN Settings for Azure and GCP
-  cidr          = local.cloud == "gcp" ? "10.0.0.0/23" : local.vpc.cidr #Use dummy value for GCP
+  cidr          = local.cloud == "gcp" || local.use_existing_vpc ? "10.0.0.0/23" : local.vpc.cidr #Use dummy value for GCP
   cidrbits      = tonumber(split("/", local.cidr)[1])
   newbits       = 28 - local.cidrbits
   netnum        = pow(2, local.newbits)

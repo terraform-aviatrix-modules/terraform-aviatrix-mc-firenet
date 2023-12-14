@@ -12,3 +12,9 @@ output "aviatrix_firewall_instance" {
     concat(aviatrix_firewall_instance.firewall_instance_1.*, aviatrix_firewall_instance.firewall_instance_2.*) #Output if local.is_aviatrix is false
   )
 }
+
+output "module_metadata" {
+  value = {
+    version = "1.5.4"
+  }
+}

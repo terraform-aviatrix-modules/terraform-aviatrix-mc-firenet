@@ -1,5 +1,8 @@
 # terraform-aviatrix-mc-firenet release notes
 
+## v1.5.4
+- Add support for BYO VNET that was added in the mc-transit module. Requires mc-transit version 2.5.2 or higher.
+
 ## v1.5.3
 - Add tags for the `aviatrix_firewall_instance` resources to the ignore_changes list, to prevent accidental replacement. Use `terraform taint` if you deliberatly want to replace an instance.
 
