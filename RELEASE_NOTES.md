@@ -1,5 +1,13 @@
 # terraform-aviatrix-mc-firenet release notes
 
+## v1.3.2
+- Add support for BYO VNET/VPC
+- Split out locals to separate file
+- Add output for module metadata
+
+## v1.3.1
+- Fix issue where password is nullable
+
 ## v1.3.0
 - 6.9 / 2.24.x compatibility
 - Add support for ssh_public_key and sic_key arguments

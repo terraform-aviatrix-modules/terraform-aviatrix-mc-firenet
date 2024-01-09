@@ -6,7 +6,7 @@ Aviatrix Terraform module for firenet deployment in multiple clouds, to be used 
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version | [mc-transit module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit) version
 :--- | :--- | :--- | :--- | :---
-v1.3.0 | >=1.1.0 | >= 6.9 | ~> 2.24.0 | ~> v2.3.0
+v1.3.2 | >=1.1.0 | >= 6.9 | ~> 2.24.0 | ~> v2.3.4
 
 Check [release notes](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/master/RELEASE_NOTES.md) for more details.
 Check [Compatibility list](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/master/COMPATIBILITY.md) for older versions.
@@ -15,7 +15,7 @@ Check [Compatibility list](https://github.com/terraform-aviatrix-modules/terrafo
 ```hcl
 module "mc_transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "v2.2.0"
+  version = "v2.3.4"
 
   cloud                  = "AWS"
   cidr                   = "10.1.0.0/23"
@@ -26,7 +26,7 @@ module "mc_transit" {
 
 module "firenet_1" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "v1.2.0"
+  version = "v1.3.2"
 
   transit_module = module.mc_transit
   firewall_image = "Palo Alto Networks VM-Series Next-Generation Firewall Bundle 1"
@@ -58,6 +58,8 @@ custom_fw_names | <img src="https://github.com/terraform-aviatrix-modules/terraf
 egress_cidr | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/gcp.png?raw=true" title="GCP"> | | CIDR For Egress VPC for GCP Firenet. Only required when deploying in GCP and enable_transit_firenet is true.
 [egress_enabled](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firenet#egress_enabled) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/gcp.png?raw=true" title="GCP"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/oci.png?raw=true" title="OCI"> | false | Enable/disable internet egress via NGFW.
 [egress_static_cidrs](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firenet#egress_static_cidrs) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/gcp.png?raw=true" title="GCP"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/oci.png?raw=true" title="OCI"> | [] | List of egress static CIDRs. Egress is required to be enabled. Example: ["1.171.15.184/32", "1.171.15.185/32"].
+egress_subnet_1 | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> | | Subnet for firenet egress interface (odd instances). Only used when mc-transit was built with an existing VNET.
+egress_subnet_2 | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> | | Subnet for firenet egress interface (even instances). Only used when mc-transit was built with an existing VNET.
 [file_share_folder_1](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance#file_share_folder) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> | | Name of the folder containing the bootstrap files (PANW only) (If file_share_folder_2 is not set, this will used for all NGFW instances)
 [file_share_folder_2](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance#file_share_folder) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> | | Name of the folder containing the bootstrap files (PANW only) (Only used when HA FW instance is deployed)
 [firewall_image_id](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance#firewall_image_id) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> | | Firewall image ID. Applicable to AWS and Azure only. For AWS, please use AMI ID. For Azure, the format is “Publisher:Offer:Plan:Version”.
@@ -70,6 +72,8 @@ fw_amount | <img src="https://github.com/terraform-aviatrix-modules/terraform-av
 [keep_alive_via_lan_interface_enabled](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firenet#keep_alive_via_lan_interface_enabled) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/gcp.png?raw=true" title="GCP"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/oci.png?raw=true" title="OCI"> | False | Enable Keep Alive via Firewall LAN Interface.
 [key_name](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance#key_name) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/aws.png?raw=true" title="AWS"> | | Applicable to AWS deployment only. AWS Key Pair name. If not provided a Key Pair will be generated.
 mgmt_cidr | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/gcp.png?raw=true" title="GCP"> | | CIDR For Management VPC for GCP Firenet. Only required when deploying in GCP and enable_transit_firenet is true and deploying Palo Alto NGFW.
+mgmt_subnet_1 | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> | | Subnet for firenet management interface (odd instances). Only used when mc-transit was built with an existing VNET.
+mgmt_subnet_2 | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> | | Subnet for firenet management interface (even instances). Only used when mc-transit was built with an existing VNET.
 [password](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance#password) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> | Aviatrix#1234 | Default initial password for firewall instances
 [ssh_public_key](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance#ssh_public_key) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> | | Initial SSH public key for firewall instances. You can either set a password or an SSH key, but not both.
 [storage_access_key_1](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance#storage_access_key) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> | | Storage_access_key to access bootstrap storage (PANW only) (If storage_access_key_2 is not set, this will used for all NGFW instances)
@@ -87,6 +91,7 @@ key | description
 :--- | :---
 [aviatrix_firenet](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firenet) | The created Aviatrix firenet object with all of it's attributes.
 [aviatrix_firewall_instance](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance) | A list of the created firewall instances and their attributes.
+module_metadata |	Information about the module, like module version.
 
 ### Common Errors
 

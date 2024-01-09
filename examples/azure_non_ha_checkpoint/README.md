@@ -4,7 +4,7 @@ On top of that, Firenet is deployed with the mc-firenet module, deploying a sing
 ```hcl
 module "transit_non_ha_azure" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "v2.3.0"
+  version = "v2.3.4"
 
   cloud                  = "azure"
   name                   = "transit-azure-non-ha"
