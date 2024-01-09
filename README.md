@@ -92,6 +92,8 @@ key | description
 :--- | :---
 [aviatrix_firenet](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firenet) | The created Aviatrix firenet object with all of it's attributes.
 [aviatrix_firewall_instance](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance) | A list of the created firewall instances and their attributes.
+egress_vpc | The aviatrix_vpc object that created the egress VPC with all it's attributes. Only in GCP.
+management_vpc | The aviatrix_vpc object that created the management VPC with all it's attributes. Only for Palo Alto deployments in GCP.
 module_metadata | Information about the module, like module version.
 
 ### Common Errors

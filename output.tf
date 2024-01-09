@@ -13,6 +13,14 @@ output "aviatrix_firewall_instance" {
   )
 }
 
+output "management_vpc" {
+  value = local.cloud == "gcp" && local.is_palo ? aviatrix_vpc.management_vpc[0] : null #Only created for Palo Alto deployments in GCP
+}
+
+output "egress_vpc" {
+  value = local.cloud == "gcp" ? aviatrix_vpc.egress_vpc[0] : null #Only created in GCP
+}
+
 output "module_metadata" {
   value = {
     version = "1.5.4"

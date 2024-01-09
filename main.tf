@@ -18,7 +18,7 @@ resource "aviatrix_vpc" "management_vpc" {
 
 # Egress VPC
 resource "aviatrix_vpc" "egress_vpc" {
-  count                = local.cloud == "gcp" ? 1 : 0 #Only create for GCP and when firenet is enabled
+  count                = local.cloud == "gcp" ? 1 : 0 #Only needed in GCP
   cloud_type           = 4
   account_name         = local.account
   name                 = "${substr(local.name, 0, 23)}-egress"
