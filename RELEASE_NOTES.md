@@ -1,5 +1,10 @@
 # terraform-aviatrix-mc-firenet release notes
 
+## v1.4.4
+- Add support for BYO VNET/VPC. Requires mc-transit 2.4.3 or higher.
+- Split out locals to separate file.
+- Add module_metadata output.
+
 ## v1.4.3
 - Add ignore lifecycle statement to VPC DNS setting for FQDN egress.
 
