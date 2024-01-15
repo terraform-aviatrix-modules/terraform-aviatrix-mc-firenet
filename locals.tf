@@ -154,7 +154,7 @@ locals {
   fw_amount_instance_2   = local.ha_gw ? local.fw_amount_per_instance : 0
 
   #FQDN Settings for Azure and GCP
-  cidr          = local.cloud == "gcp" ? "10.0.0.0/23" : local.vpc.cidr #Use dummy value for GCP
+  cidr          = local.cloud == "gcp" || local.use_existing_vpc ? "10.0.0.0/23" : local.vpc.cidr #Use dummy value for GCP
   cidrbits      = tonumber(split("/", local.cidr)[1])
   newbits       = 28 - local.cidrbits
   netnum        = pow(2, local.newbits)
