@@ -2,7 +2,7 @@ locals {
   #Gather transit module details in locals, for easy reference
   transit_gateway               = var.transit_module.transit_gateway
   vpc                           = var.transit_module.vpc
-  vpc_id                        = var.transit_module.vpc_id
+  vpc_id                        = var.transit_module.mc_firenet_details.vpc_id
   account                       = var.transit_module.transit_gateway.account_name
   region                        = var.transit_module.mc_firenet_details.region
   ha_region                     = var.transit_module.mc_firenet_details.ha_region
