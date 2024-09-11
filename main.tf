@@ -38,7 +38,7 @@ resource "aviatrix_firewall_instance" "firewall_instance_1" {
   firewall_size          = local.instance_size
   vpc_id                 = local.vpc_id
   firewall_image         = var.firewall_image
-  firewall_image_version = local.firewall_image_version
+  firewall_image_version = var.firewall_image_version
   egress_subnet          = local.egress_subnet_1
   firenet_gw_name        = local.transit_gateway.gw_name
   management_subnet      = local.mgmt_subnet_1
@@ -78,7 +78,7 @@ resource "aviatrix_firewall_instance" "firewall_instance_2" {
   firewall_size          = local.instance_size
   vpc_id                 = local.vpc_id
   firewall_image         = var.firewall_image
-  firewall_image_version = local.firewall_image_version
+  firewall_image_version = var.firewall_image_version
   egress_subnet          = local.egress_subnet_2
   firenet_gw_name        = local.transit_gateway.ha_gw_name
   management_subnet      = local.mgmt_subnet_2
