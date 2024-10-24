@@ -76,7 +76,7 @@ module "azure_transit" {
 
 module "firenet" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "v1.5.4"
+  version = "v1.6.0"
 
   transit_module = module.azure_transit
   firewall_image = "Check Point CloudGuard IaaS Single Gateway R80.40 - Bring Your Own License"

@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-firenet release notes
 
+## v1.6.0
+
+### Add support for Aviatrix controller version 7.2 and Terraform provider version 3.2.x.
+
 ## v1.5.4
 - Add support for BYO VNET that was added in the mc-transit module. Requires mc-transit version 2.5.2 or higher.
 - Add outputs for `egress_vpc` and `management_vpc`.
