@@ -23,6 +23,6 @@ output "egress_vpc" {
 
 output "module_metadata" {
   value = {
-    version = "1.5.4"
+    version = "1.6.0"
   }
 }

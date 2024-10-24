@@ -6,7 +6,7 @@ Aviatrix Terraform module for firenet deployment in multiple clouds, to be used 
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version | [mc-transit module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit) version
 :--- | :--- | :--- | :--- | :---
-v1.5.4 | >=1.1.0 | >= 7.1 | ~> 3.1.0 | ~> v2.5.2
+v1.5.4 | >=1.3.0 | >= 7.1 | ~> 3.1.0 | ~> v2.5.2
 
 Check [release notes](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/master/RELEASE_NOTES.md) for more details.
 Check [Compatibility list](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/master/COMPATIBILITY.md) for older versions.
@@ -15,7 +15,7 @@ Check [Compatibility list](https://github.com/terraform-aviatrix-modules/terrafo
 ```hcl
 module "mc_transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "v2.5.2"
+  version = "v2.6.0"
 
   cloud                  = "AWS"
   cidr                   = "10.1.0.0/23"
@@ -26,7 +26,7 @@ module "mc_transit" {
 
 module "firenet_1" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "v1.5.4"
+  version = "v1.6.0"
 
   transit_module = module.mc_transit
   firewall_image = "Palo Alto Networks VM-Series Next-Generation Firewall Bundle 1"
@@ -70,7 +70,6 @@ fw_amount | <img src="https://github.com/terraform-aviatrix-modules/terraform-av
 [iam_role_2](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance#iam_role) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/aws.png?raw=true" title="AWS"> | | IAM Role used to access bootstrap bucket. (Only used if 2 or more FW instances are deployed, e.g. when ha_gw is true. Applies to "even" fw instances (2,4,6 etc))
 [inspection_enabled](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firenet#inspection_enabled) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/gcp.png?raw=true" title="GCP"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/oci.png?raw=true" title="OCI"> | true | Enable/disable east/west + north/south inspection via NGFW.
 [instance_size](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance#firewall_size) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/aws.png?raw=true" title="AWS"> <br> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> <br> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/gcp.png?raw=true" title="GCP"> <br> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/oci.png?raw=true" title="OCI"> | c5.xlarge <br> Standard_D3_v2 <br> n1-standard-4 <br> VM.Standard2.4 | Size of the NGFW instances
-[keep_alive_via_lan_interface_enabled](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firenet#keep_alive_via_lan_interface_enabled) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/gcp.png?raw=true" title="GCP"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/oci.png?raw=true" title="OCI"> | False | Enable Keep Alive via Firewall LAN Interface.
 [key_name](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance#key_name) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/aws.png?raw=true" title="AWS"> | | Applicable to AWS deployment only. AWS Key Pair name. If not provided a Key Pair will be generated.
 mgmt_cidr | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/gcp.png?raw=true" title="GCP"> | | CIDR For Management VPC for GCP Firenet. Only required when deploying in GCP and enable_transit_firenet is true and deploying Palo Alto NGFW.
 mgmt_subnet_1 | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet/blob/main/img/azure.png?raw=true" title="Azure"> | | Subnet for firenet management interface (odd instances). Only used when mc-transit was built with an existing VNET.
