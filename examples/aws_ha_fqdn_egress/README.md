@@ -16,7 +16,7 @@ module "mc_transit_ha_aws_fqdn" {
 
 module "mc_firenet_ha_aws_fqdn" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "1.6.0"
+  version = "8.0.0"
 
   transit_module  = module.mc_transit_ha_aws_fqdn
   firewall_image  = "aviatrix"

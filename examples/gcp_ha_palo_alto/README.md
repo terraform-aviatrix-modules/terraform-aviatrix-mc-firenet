@@ -17,7 +17,7 @@ module "transit_ha_gcp" {
 
 module "mc_firenet_ha_gcp" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "1.6.0"
+  version = "8.0.0"
 
   transit_module = module.transit_ha_gcp
   firewall_image = "Palo Alto Networks VM-Series Next-Generation Firewall BUNDLE1"
