@@ -4,7 +4,7 @@ On top of that, Firenet is deployed with the mc-firenet module, deploying 2 Fort
 ```hcl
 module "transit_ha_aws" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "v2.5.2"
+  version = "v8.0.0"
 
   cloud                  = "aws"
   name                   = "transit-ha-aws"

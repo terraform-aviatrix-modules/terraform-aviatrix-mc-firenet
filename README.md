@@ -15,7 +15,7 @@ Check [Compatibility list](https://github.com/terraform-aviatrix-modules/terrafo
 ```hcl
 module "mc_transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "v2.6.0"
+  version = "v8.0.0"
 
   cloud                  = "AWS"
   cidr                   = "10.1.0.0/23"
@@ -26,7 +26,7 @@ module "mc_transit" {
 
 module "firenet_1" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "v1.6.0"
+  version = "v8.0.0"
 
   transit_module = module.mc_transit
   firewall_image = "Palo Alto Networks VM-Series Next-Generation Firewall Bundle 1"

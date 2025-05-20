@@ -1,6 +1,6 @@
 module "mc_transit_ha_aws_fqdn" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.5.2"
+  version = "8.0.0"
 
   cloud                  = "aws"
   name                   = "transit-ha-fqdn-aws"

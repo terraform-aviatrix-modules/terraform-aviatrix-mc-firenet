@@ -59,7 +59,7 @@ module "vnet" {
 
 module "azure_transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.5.2"
+  version = "8.0.0"
 
   cloud                  = "azure"
   region                 = var.region

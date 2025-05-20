@@ -1,6 +1,6 @@
 module "transit_ha_aws" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "v2.5.2"
+  version = "v8.0.0"
 
   cloud                  = "aws"
   name                   = "transit-ha-aws"
